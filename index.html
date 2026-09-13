@@ -600,7 +600,7 @@
         playful:{name:'경쾌한 사회극',suno:'Playful Regency-inspired chamber music, pizzicato strings, nimble woodwinds and light pianoforte. Elegant social wit, graceful dance pulse, subtle romantic tension, instrumental, no modern drums. Duration 2:30.',flow:'Create a 2 minute 30 second playful instrumental chamber piece for an elegant social comedy. Pizzicato strings, nimble woodwinds and light pianoforte. Graceful dance rhythm, witty conversational phrasing, a brief romantic middle section, crisp but warm ending. No modern drums.'},
         crescendo:{name:'갈등에서 해소로',suno:'Cinematic period-drama score, solo pianoforte and dark strings growing toward a powerful rain-confession climax, then resolving into a warm luminous final theme. Instrumental, restrained at first, emotionally expansive by the finale, no modern percussion. Duration 2:30.',flow:'Create a 2 minute 30 second instrumental period-drama score. Begin with sparse pianoforte and dark low strings, build gradually toward a powerful rain-confession climax, then move into a warm luminous final theme. Preserve historical chamber colors; no modern percussion or vocals.'}
       };
-      const scenes = [
+      const prideScenes = [
         ['00:00–00:08 · 도입','흐린 아침의 롱번','영국 시골의 넓은 풍경과 베넷가의 저택으로 이야기의 세계를 엽니다.','Late Georgian English countryside at dawn, Longbourn house beyond misty fields'],
         ['00:08–00:15 · 도입','창가의 엘리자베스','책을 든 엘리자베스의 옆모습으로 독립적인 성격을 암시합니다.','Elizabeth by a tall window holding a book, thoughtful profile'],
         ['00:15–00:22 · 도입','도착한 초대장','무도회 초대장이 가족의 일상에 파문을 일으킵니다.','a sealed invitation placed on a breakfast table, excited family beyond'],
@@ -622,6 +622,100 @@
         ['02:15–02:23 · 피날레','새벽의 고백','떠오르는 빛과 함께 감정이 조용히 해소됩니다.','tender confession at sunrise on an English country path'],
         ['02:23–02:30 · 피날레','하나의 풍경','넓은 풍경 속 나란히 걷는 두 사람으로 작품을 마칩니다.','Elizabeth and Darcy walking side by side toward a glowing distant estate']
       ];
+
+      const odysseyScenes = [
+        ['00:00–00:08 · 도입','트로이를 떠나는 함대','전쟁을 마친 오디세우스의 배들이 고향 이타카를 향해 출항합니다.','Odysseus fleet leaving the smoking coast of Troy at dawn'],
+        ['00:08–00:15 · 도입','바다 위의 맹세','오디세우스가 별을 바라보며 반드시 가족에게 돌아가겠다고 다짐합니다.','Odysseus standing at the prow beneath a field of ancient stars'],
+        ['00:15–00:22 · 시련','포세이돈의 폭풍','거대한 파도와 번개가 함대를 흩어 놓으며 긴 여정이 시작됩니다.','Poseidon storm scattering ancient Greek ships across towering waves'],
+        ['00:22–00:30 · 유혹','로토파고스의 섬','달콤한 망각의 열매가 선원들에게 고향의 기억을 잊게 합니다.','dreamlike island of the lotus eaters, sailors beneath pale flowers'],
+        ['00:30–00:37 · 위기','키클롭스의 동굴','폴리페모스의 동굴에 갇힌 일행이 거대한 그림자와 마주합니다.','Odysseus and crew trapped inside the cyclops cave by firelight'],
+        ['00:37–00:45 · 탈출','양 떼 아래의 탈출','오디세우스의 지혜로 선원들이 양 아래 숨어 동굴을 빠져나옵니다.','Greek sailors escaping beneath giant sheep at the mouth of a cave'],
+        ['00:45–00:52 · 전환','바람 자루가 열린 밤','고향을 눈앞에 두고 금지된 바람 자루가 열려 배가 다시 밀려납니다.','enchanted bag of winds bursting open aboard a night-bound ship'],
+        ['00:52–01:00 · 상실','부서진 함대','라이스토리곤의 습격으로 수많은 배가 바위 사이에서 파괴됩니다.','ancient fleet shattered between cliffs under a rain of stones'],
+        ['01:00–01:07 · 유혹','키르케의 궁전','마법사 키르케의 황금빛 궁전에서 인간과 짐승의 경계가 흐려집니다.','Circe in a golden island palace surrounded by transformed sailors'],
+        ['01:07–01:15 · 하강','저승으로 가는 문','오디세우스가 죽은 자들의 세계로 내려가는 어두운 입구에 섭니다.','Odysseus before the shadowed gate of the Greek underworld'],
+        ['01:15–01:23 · 계시','테이레시아스의 예언','예언자가 귀환을 위해 지켜야 할 경고와 대가를 전합니다.','ghost of Tiresias delivering a prophecy beside a dark river'],
+        ['01:23–01:30 · 유혹','세이렌의 노래','돛대에 묶인 오디세우스가 바다를 가득 채운 치명적인 노래를 듣습니다.','Odysseus bound to the mast as sirens sing above a silver sea'],
+        ['01:30–01:38 · 위기','스킬라와 카리브디스','괴물과 소용돌이 사이의 좁은 바다를 배가 가까스로 통과합니다.','Greek ship passing between Scylla and the vast whirlpool Charybdis'],
+        ['01:38–01:45 · 금기','태양신의 소','굶주린 선원들이 금지된 소 떼에 손을 대며 마지막 재앙을 부릅니다.','sacred cattle of Helios beneath an ominous crimson sunset'],
+        ['01:45–01:53 · 고독','칼립소의 해변','홀로 남은 오디세우스가 먼 수평선을 보며 이타카를 그리워합니다.','Odysseus alone on Calypso island staring toward the distant horizon'],
+        ['01:53–02:00 · 귀환','마지막 뗏목','직접 만든 뗏목 위에서 다시 폭풍과 맞서며 귀환을 포기하지 않습니다.','Odysseus on a fragile raft fighting a final sea storm'],
+        ['02:00–02:08 · 도움','나우시카의 발견','파도에 쓰러진 영웅을 나우시카가 새벽의 강가에서 발견합니다.','Nausicaa discovering the shipwrecked hero beside a dawn river'],
+        ['02:08–02:15 · 잠입','거지로 돌아온 왕','이타카에 도착한 오디세우스가 정체를 숨긴 채 자신의 궁전을 바라봅니다.','disguised Odysseus entering Ithaca and watching his occupied palace'],
+        ['02:15–02:23 · 절정','활의 시련','아무도 당기지 못한 활을 들어 올리며 진짜 왕의 귀환이 드러납니다.','Odysseus drawing the great bow before the stunned suitors'],
+        ['02:23–02:30 · 피날레','올리브나무 침상','페넬로페와 오디세우스가 둘만 아는 비밀로 서로를 확인합니다.','Odysseus and Penelope reunited beside their ancient olive-tree bed']
+      ];
+
+      const iliadScenes = [
+        ['00:00–00:08 · 도입','트로이의 성벽','해 뜨는 평원 너머로 그리스 함대와 트로이 성벽이 대치합니다.','Troy walls at sunrise facing the vast Greek encampment'],
+        ['00:08–00:15 · 갈등','왕과 영웅의 분노','아가멤논과 아킬레우스가 전리품을 두고 공개적으로 충돌합니다.','Achilles and Agamemnon confronting each other before the Greek chiefs'],
+        ['00:15–00:22 · 상실','브리세이스를 빼앗기다','브리세이스가 끌려가고 아킬레우스는 모욕을 삼키며 전장을 떠납니다.','Briseis led away while Achilles watches in restrained fury'],
+        ['00:22–00:30 · 단절','바닷가의 아킬레우스','아킬레우스가 홀로 바다에 앉아 어머니 테티스에게 호소합니다.','Achilles alone on the shore calling to the sea nymph Thetis'],
+        ['00:30–00:37 · 위기','트로이군의 진격','아킬레우스가 빠진 틈을 타 헥토르의 군대가 그리스 진영을 압박합니다.','Hector leading Trojan ranks across the dust-filled plain'],
+        ['00:37–00:45 · 인간','성벽 위의 작별','헥토르가 안드로마케와 어린 아들에게 마지막 인사를 건넵니다.','Hector saying farewell to Andromache and their child upon Troy walls'],
+        ['00:45–00:52 · 대결','두 전사의 창','넓은 평원에서 양 진영의 전사들이 창과 방패를 맞댑니다.','bronze-armored warriors meeting with spears across the Trojan plain'],
+        ['00:52–01:00 · 위기','불타는 함선','트로이군의 불길이 그리스 함선 가까이 번지며 패배가 임박합니다.','Trojan fire reaching the black Greek ships at dusk'],
+        ['01:00–01:07 · 결심','파트로클로스의 부탁','파트로클로스가 친구의 갑옷을 빌려 전우들을 구하게 해 달라고 청합니다.','Patroclus asking Achilles for his armor inside a dim tent'],
+        ['01:07–01:15 · 반격','아킬레우스의 갑옷','파트로클로스가 빛나는 갑옷을 입고 미르미돈을 이끌어 돌진합니다.','Patroclus in Achilles armor leading the Myrmidons into battle'],
+        ['01:15–01:23 · 전환','밀려나는 트로이군','그리스군이 용기를 되찾고 전장이 트로이 성벽 쪽으로 이동합니다.','Trojan ranks retreating beneath the gleam of bronze shields'],
+        ['01:23–01:30 · 비극','파트로클로스의 최후','헥토르의 창 앞에 파트로클로스가 쓰러지며 승리가 비극으로 바뀝니다.','Patroclus falling before Hector beneath a darkened sky'],
+        ['01:30–01:38 · 슬픔','재를 뒤집어쓴 영웅','소식을 들은 아킬레우스가 땅에 주저앉아 친구의 죽음을 애도합니다.','Achilles grieving in ashes beside the body of Patroclus'],
+        ['01:38–01:45 · 준비','신이 만든 방패','헤파이스토스의 불길 속에서 세계가 새겨진 새로운 방패가 완성됩니다.','Hephaestus forging the cosmic shield of Achilles in divine fire'],
+        ['01:45–01:53 · 귀환','전장으로 돌아오다','새 갑옷을 입은 아킬레우스가 새벽빛 속에서 다시 군대 앞에 섭니다.','Achilles returning in new armor before the assembled Greeks'],
+        ['01:53–02:00 · 격돌','강을 뒤흔든 전투','아킬레우스의 분노가 전장을 휩쓸고 강물까지 붉게 흔들립니다.','Achilles charging through battle beside the surging river Scamander'],
+        ['02:00–02:08 · 절정','성문 앞의 헥토르','헥토르가 홀로 남아 성문 앞에서 아킬레우스를 기다립니다.','Hector standing alone before the sealed gates of Troy'],
+        ['02:08–02:15 · 결말','두 영웅의 결투','트로이 성벽 아래에서 운명을 건 마지막 결투가 벌어집니다.','Achilles and Hector in their final duel beneath Troy walls'],
+        ['02:15–02:23 · 화해','밤의 프리아모스','늙은 프리아모스 왕이 적진을 찾아와 아들의 몸을 돌려달라고 청합니다.','King Priam kneeling before Achilles in the quiet night tent'],
+        ['02:23–02:30 · 피날레','헥토르의 장례','새벽의 트로이가 침묵 속에서 헥토르를 떠나보냅니다.','funeral of Hector at dawn as Troy mourns beneath pale smoke']
+      ];
+
+      const genericBeats = [
+        ['도입','세계의 첫 풍경','《{story}》의 시대와 장소를 넓은 풍경으로 소개합니다.','opening landscape that establishes the world of {story}'],
+        ['도입','주인공의 첫 모습','주인공의 일상과 성격을 한눈에 보여주는 장면입니다.','first portrait of the protagonist of {story} in their everyday world'],
+        ['도입','마음을 흔드는 징조','평온한 일상에 변화가 다가오고 있음을 작은 사건으로 암시합니다.','a subtle omen disrupting the ordinary world of {story}'],
+        ['출발','피할 수 없는 부름','주인공이 여정을 시작하게 만드는 결정적 사건이 일어납니다.','inciting event that calls the hero of {story} into a journey'],
+        ['출발','문턱을 넘다','익숙한 세계를 떠나 낯선 공간으로 첫발을 내딛습니다.','the protagonist of {story} crossing into an unfamiliar world'],
+        ['만남','새로운 동행','여정의 의미를 바꿀 동료나 인연과 처음 마주합니다.','an important companion entering the story of {story}'],
+        ['성장','첫 번째 시험','주인공의 약점과 욕망이 드러나는 작은 시련을 겪습니다.','first meaningful trial for the protagonist of {story}'],
+        ['성장','가까워지는 마음','인물 사이의 신뢰나 갈등이 깊어지는 조용한 순간입니다.','quiet relationship turning point in {story}'],
+        ['성장','새롭게 보이는 세계','이전과 다른 시선으로 장소와 사람을 바라보기 시작합니다.','the familiar world of {story} seen with transformed eyes'],
+        ['갈등','드리우는 그림자','다가오는 위기와 적대적인 힘을 빛과 날씨로 예고합니다.','an approaching threat casting a shadow over {story}'],
+        ['갈등','돌이킬 수 없는 선택','주인공이 대가를 감수하고 중요한 결정을 내립니다.','the irreversible choice at the center of {story}'],
+        ['추락','가장 깊은 상실','계획이 무너지고 가장 소중한 것을 잃는 순간입니다.','the deepest loss and emotional low point of {story}'],
+        ['전환','숨겨진 진실','편지, 기억, 증언 또는 발견을 통해 진실이 드러납니다.','a hidden truth revealed in {story}'],
+        ['전환','다시 세운 마음','주인공이 상처를 받아들이고 새로운 목적을 선택합니다.','the protagonist of {story} gathering resolve again'],
+        ['귀환','달라진 발걸음','처음의 장소로 돌아가지만 인물의 태도와 시선은 달라져 있습니다.','a transformed return to the central place of {story}'],
+        ['귀환','조용한 도움','동료의 작은 행동이 마지막 도전을 가능하게 만듭니다.','a quiet act of help before the finale of {story}'],
+        ['재회','다시 마주한 관계','멀어졌던 인물들이 서로의 변화를 알아보는 순간입니다.','estranged characters meeting again in {story}'],
+        ['절정','운명의 대면','주인공이 가장 큰 두려움이나 적과 정면으로 마주합니다.','the decisive confrontation at the climax of {story}'],
+        ['해소','선택의 결과','마지막 선택의 대가와 변화가 인물들의 표정에 드러납니다.','aftermath of the final choice in {story}'],
+        ['피날레','남겨진 한 장면','처음과 이어지면서도 달라진 풍경으로 이야기를 마칩니다.','final transformed landscape that closes {story}']
+      ];
+
+      function normalizeStory(value){return (value||'').toLowerCase().replace(/[^a-z0-9가-힣]/g,'');}
+      function cloneScenes(list){return list.map(function(scene){return scene.slice();});}
+      function buildGenericScenes(story){
+        const title=(story||'새로운 이야기').trim()||'새로운 이야기';
+        return genericBeats.map(function(beat,index){
+          const time=prideScenes[index][0].split(' · ')[0]+' · '+beat[0];
+          return [time,beat[1],beat[2].replace(/\{story\}/g,title),beat[3].replace(/\{story\}/g,title)];
+        });
+      }
+      function buildScenes(story){
+        const key=normalizeStory(story);
+        if(key.includes('오만과편견')||key.includes('prideandprejudice')) return cloneScenes(prideScenes);
+        if(key.includes('오디세이아')||key.includes('오디세우스')||key.includes('odyssey')||key.includes('odysseus')) return cloneScenes(odysseyScenes);
+        if(key.includes('일리아스')||key.includes('일리야드')||key.includes('iliad')) return cloneScenes(iliadScenes);
+        return buildGenericScenes(story);
+      }
+      function storyContext(story){
+        const key=normalizeStory(story);
+        if(key.includes('오만과편견')||key.includes('prideandprejudice')) return 'historically plausible late-Georgian English details';
+        if(key.includes('오디세이아')||key.includes('오디세우스')||key.includes('odyssey')||key.includes('odysseus')) return 'mythic Bronze Age Greek world, ancient ships, islands and palaces';
+        if(key.includes('일리아스')||key.includes('일리야드')||key.includes('iliad')) return 'mythic Bronze Age Troy, bronze armor, linen, timber ships and fortified walls';
+        return 'world and period details appropriate to '+((story||'the selected story').trim()||'the selected story');
+      }
+      let scenes=buildScenes(state.story);
 
       function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(function(){toast.classList.remove('show');},1800);}
       function updateSummary(){
@@ -659,18 +753,29 @@
         strip.querySelectorAll('button').forEach(function(btn){btn.addEventListener('click',function(){selectScene(Number(btn.dataset.scene));});});
         selectScene(state.scene);
       }
+      function refreshStoryboard(){
+        scenes=buildScenes(state.story);
+        state.scene=0;
+        document.getElementById('storyboard-title').textContent='《'+((state.story||'새로운 이야기').trim()||'새로운 이야기')+'》의 20장 스토리보드';
+        renderScenes();
+      }
+      function makeScenePrompt(scene){
+        const style=styleData[state.style];
+        return scene[3]+', '+style.name+', '+style.note+', '+style.light+', '+storyContext(state.story)+', consistent recurring characters, cinematic composition, no anachronisms.';
+      }
       function selectScene(index){
+        if(!scenes[index]) index=0;
         state.scene=index;
         document.querySelectorAll('.scene-dot').forEach(function(el){el.setAttribute('aria-pressed',String(Number(el.dataset.scene)===index));});
-        const s=scenes[index],style=styleData[state.style];
+        const s=scenes[index];
         document.getElementById('scene-time').textContent=s[0];
         document.getElementById('scene-title').textContent=s[1];
         document.getElementById('scene-description').textContent=s[2];
-        document.getElementById('scene-prompt').textContent=s[3]+', '+style.name+', '+style.note+', '+style.light+', historically plausible late-Georgian details, consistent characters, cinematic wide composition, no modern objects.';
+        document.getElementById('scene-prompt').textContent=makeScenePrompt(s);
       }
-      function planObject(){return {project:state.story,duration:state.duration,moods:state.moods,visualStyle:styleData[state.style].name,visualBible:styleData[state.style],soundDirection:soundData[state.sound].name,musicService:state.service,musicPrompt:document.getElementById('music-prompt').textContent,storyboard:scenes.map(function(s,i){return {scene:i+1,time:s[0],title:s[1],description:s[2],prompt:s[3]};})};}
+      function planObject(){return {project:state.story,duration:state.duration,moods:state.moods,visualStyle:styleData[state.style].name,visualBible:styleData[state.style],soundDirection:soundData[state.sound].name,musicService:state.service,musicPrompt:document.getElementById('music-prompt').textContent,storyboard:scenes.map(function(s,i){return {scene:i+1,time:s[0],title:s[1],description:s[2],prompt:makeScenePrompt(s)};})};}
 
-      document.getElementById('story-input').addEventListener('input',function(e){state.story=e.target.value;updateSummary();});
+      document.getElementById('story-input').addEventListener('input',function(e){state.story=e.target.value;updateSummary();refreshStoryboard();});
       document.querySelectorAll('#mood-chips .chip').forEach(function(btn){btn.addEventListener('click',function(){const on=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',String(on));state.moods=Array.from(document.querySelectorAll('#mood-chips .chip[aria-pressed="true"]')).map(function(el){return el.textContent;});updateSummary();});});
       document.querySelectorAll('#duration-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.duration=btn.dataset.duration;document.querySelectorAll('#duration-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateSummary();});});
       document.getElementById('to-styles').addEventListener('click',function(){document.getElementById('styles').scrollIntoView({behavior:'smooth'});});
@@ -684,7 +789,7 @@
 
       if(document.modelContext&&document.modelContext.registerTool){
         const controller=new AbortController();
-        Promise.resolve(document.modelContext.registerTool({name:'configure_project',title:'프로젝트 설정',description:'이야기 제목, 길이와 원하는 감정을 설정하고 보이는 프로젝트 요약을 갱신합니다.',inputSchema:{type:'object',properties:{story:{type:'string'},duration:{type:'string',enum:['2분','2분 30초','3분']},moods:{type:'array',items:{type:'string'},maxItems:5}},required:['story'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||typeof input.story!=='string'||!input.story.trim())throw new Error('이야기 제목이 필요합니다.');state.story=input.story.trim();if(input.duration)state.duration=input.duration;if(Array.isArray(input.moods))state.moods=input.moods.slice(0,5);document.getElementById('story-input').value=state.story;updateSummary();return {story:state.story,duration:state.duration,moods:state.moods};}},{signal:controller.signal})).catch(function(){});
+        Promise.resolve(document.modelContext.registerTool({name:'configure_project',title:'프로젝트 설정',description:'이야기 제목, 길이와 원하는 감정을 설정하고 보이는 프로젝트 요약과 스토리보드를 갱신합니다.',inputSchema:{type:'object',properties:{story:{type:'string'},duration:{type:'string',enum:['2분','2분 30초','3분']},moods:{type:'array',items:{type:'string'},maxItems:5}},required:['story'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||typeof input.story!=='string'||!input.story.trim())throw new Error('이야기 제목이 필요합니다.');state.story=input.story.trim();if(input.duration)state.duration=input.duration;if(Array.isArray(input.moods))state.moods=input.moods.slice(0,5);document.getElementById('story-input').value=state.story;updateSummary();refreshStoryboard();return {story:state.story,duration:state.duration,moods:state.moods,storyboardTitle:document.getElementById('storyboard-title').textContent};}},{signal:controller.signal})).catch(function(){});
         Promise.resolve(document.modelContext.registerTool({name:'select_visual_style',title:'그림 스타일 선택',description:'프로젝트의 그림 스타일을 선택하고 비주얼 바이블을 갱신합니다.',inputSchema:{type:'object',properties:{style:{type:'string',enum:['oil','watercolor','engraving']}},required:['style'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||!styleData[input.style])throw new Error('지원하지 않는 스타일입니다.');selectStyle(input.style);return {style:input.style,name:styleData[input.style].name};}},{signal:controller.signal})).catch(function(){});
         Promise.resolve(document.modelContext.registerTool({name:'select_music_output',title:'음악 출력 선택',description:'음악 방향과 제작 도구를 선택해 보이는 제작문을 갱신합니다.',inputSchema:{type:'object',properties:{direction:{type:'string',enum:['restrained','playful','crescendo']},service:{type:'string',enum:['suno','flow','both']}},required:['direction','service'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||!soundData[input.direction]||!['suno','flow','both'].includes(input.service))throw new Error('지원하지 않는 음악 설정입니다.');state.sound=input.direction;state.service=input.service;updateMusic();return {direction:soundData[state.sound].name,service:state.service};}},{signal:controller.signal})).catch(function(){});
         Promise.resolve(document.modelContext.registerTool({name:'read_project_plan',title:'제작안 읽기',description:'현재 선택된 시각 스타일, 음악 방향과 스토리보드를 읽습니다.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute:function(){return planObject();}},{signal:controller.signal})).catch(function(){});
@@ -692,7 +797,7 @@
 
       updateSummary();
       updateMusic();
-      renderScenes();
+      refreshStoryboard();
     })();
   </script>
 </body>

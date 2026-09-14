@@ -475,7 +475,7 @@
       <a href="#sound">음악</a>
       <a href="#storyboard">스토리보드</a>
     </nav>
-    <span class="save-state" aria-live="polite"><span class="save-dot"></span><span id="save-state-text">이 기기에 자동 저장</span></span>
+    <span class="save-state" aria-live="polite"><span class="save-dot"></span><span id="save-state-text">새로고침하면 초기화</span></span>
   </header>
 
   <main>
@@ -650,27 +650,11 @@
 
   <script>
     (function () {
-      const STORAGE_KEY='scene-palette-state-v3';
       const FEATURED_STYLE_KEYS=['oil','watercolor','engraving'];
       const STYLE_KEYS=FEATURED_STYLE_KEYS.concat(['impressionism','postImpressionism','realism','surrealism','expressionism','romanticism','modernArt','contemporary','abstract','minimal','digital','pastel','acrylic','gouache','inkWash','oriental','sumukhColor','artNouveau','artDeco','vintageIllustration','fantasy','dreamscape','cinematic','photorealism','hyperrealism','painterly','textured']);
       const defaultState={story:'',moods:['절제된 설렘','우아함'],duration:'2분 30초',style:'oil',sound:'restrained',service:'suno',scene:0};
-      function readSavedState(){
-        try {
-          const value=localStorage.getItem(STORAGE_KEY);
-          if(!value) return null;
-          const parsed=JSON.parse(value);
-          return parsed&&typeof parsed==='object'?parsed:null;
-        } catch(error){return null;}
-      }
-      const savedState=readSavedState();
-      const state=Object.assign({},defaultState,savedState||{});
-      state.story='';
-      if(!Array.isArray(state.moods)) state.moods=defaultState.moods.slice();
-      if(!['2분','2분 30초','3분'].includes(state.duration)) state.duration=defaultState.duration;
-      if(!STYLE_KEYS.includes(state.style)) state.style=defaultState.style;
-      if(!['restrained','playful','crescendo'].includes(state.sound)) state.sound=defaultState.sound;
-      if(!['suno','flow','both'].includes(state.service)) state.service=defaultState.service;
-      if(!Number.isInteger(state.scene)||state.scene<0||state.scene>19) state.scene=0;
+      const state=Object.assign({},defaultState,{moods:defaultState.moods.slice()});
+      try { localStorage.removeItem('scene-palette-state-v3'); } catch(error) {}
       function visualStyle(name,description,tags,palette,texture,watch,note,light,composition){return {name:name,description:description,tags:tags,palette:palette,texture:texture,watch:watch,note:note,light:light,composition:composition};}
       const styleData = {
         oil:visualStyle('낭만주의 유화','깊은 색과 빛으로 말하지 못한 감정을 크게 보여줘요.',['극적인','깊은 색','캔버스 질감'],['#253d35','#584135','#b88c54','#e7d7b9'],'texture','빛의 방향과 인물 사이의 거리','폭풍 전의 고요함처럼 깊고 절제된 색','흐린 창가 빛과 따뜻한 촛불','인물 사이의 거리로 감정 표현'),
@@ -877,14 +861,8 @@
       function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(function(){toast.classList.remove('show');},1800);}
       function saveState(){
         const label=document.getElementById('save-state-text');
-        try {
-          localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-          if(label) label.textContent='이 기기에 저장됨';
-          return true;
-        } catch(error){
-          if(label) label.textContent='저장할 수 없음';
-          return false;
-        }
+        if(label) label.textContent='현재 화면에만 적용됨';
+        return true;
       }
       function recommendedStyleKeys(story){
         const key=normalizeStory(story);
@@ -925,7 +903,7 @@
         document.querySelectorAll('.style-card,.style-toggle').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.style===state.style));});
         document.querySelectorAll('.sound-route').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.sound===state.sound));});
         document.querySelectorAll('#service-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.service===state.service));});
-        document.getElementById('save-state-text').textContent=savedState?'이 기기에 저장됨':'이 기기에 자동 저장';
+        document.getElementById('save-state-text').textContent='새로고침하면 초기화';
       }
       function updateSummary(){
         document.getElementById('project-name').textContent=state.story||'프로젝트(작품명)을 입력하세요';

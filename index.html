@@ -224,30 +224,11 @@
     }
     .style-card:hover { transform:translateY(-3px); box-shadow:0 14px 30px rgba(48,35,24,.12); }
     .style-card[aria-pressed="true"] { border-color:var(--wine); box-shadow:0 0 0 3px rgba(131,56,47,.14); }
-    .style-preview {
-      position:relative;
-      display:block;
-      aspect-ratio:1.75/1;
-      overflow:hidden;
-      background:
-        radial-gradient(circle at 23% 28%,var(--c3) 0 7%,transparent 8%),
-        radial-gradient(circle at 70% 38%,var(--c4) 0 12%,transparent 13%),
-        linear-gradient(142deg,var(--c1),var(--c2) 48%,var(--c3));
-      isolation:isolate;
-    }
-    .style-preview::before,.style-preview::after { content:""; position:absolute; inset:0; z-index:-1; }
-    .style-preview::before { opacity:.62; mix-blend-mode:screen; }
-    .style-preview::after { opacity:.26; mix-blend-mode:multiply; }
-    .style-preview[data-texture="wash"]::before { inset:-16%; background:radial-gradient(ellipse at 28% 52%,var(--c4),transparent 38%),radial-gradient(ellipse at 76% 36%,var(--c3),transparent 34%); filter:blur(12px); }
-    .style-preview[data-texture="brush"]::before { background:repeating-linear-gradient(164deg,transparent 0 9px,var(--c4) 10px 13px,transparent 14px 22px); transform:scale(1.2) rotate(-3deg); }
-    .style-preview[data-texture="dots"]::before { background:radial-gradient(circle,var(--c4) 0 2px,transparent 2.5px); background-size:13px 13px; }
-    .style-preview[data-texture="graphic"]::before { background:linear-gradient(45deg,transparent 31%,var(--c4) 32% 45%,transparent 46%),linear-gradient(-45deg,transparent 57%,var(--c3) 58% 68%,transparent 69%); }
-    .style-preview[data-texture="dream"]::before { inset:-20%; background:conic-gradient(from 40deg at 50% 50%,var(--c4),transparent,var(--c3),transparent,var(--c4)); filter:blur(16px); }
-    .style-preview[data-texture="ink"]::before { background:radial-gradient(ellipse at 30% 70%,var(--c1) 0 4%,transparent 5%),linear-gradient(104deg,transparent 38%,var(--c4) 39% 42%,transparent 43%); filter:contrast(1.25); }
-    .style-preview[data-texture="real"]::before { background:linear-gradient(175deg,transparent 0 52%,var(--c1) 53% 65%,var(--c2) 66% 100%); opacity:.46; }
-    .style-preview[data-texture="texture"]::after { background:repeating-linear-gradient(88deg,rgba(30,23,18,.42) 0 2px,transparent 2px 7px),repeating-linear-gradient(4deg,transparent 0 5px,rgba(255,255,255,.28) 6px 8px); }
-    .preview-caption { position:absolute; left:11px; bottom:9px; padding:4px 8px; color:#fff; background:rgba(28,23,20,.68); border-radius:999px; font-size:.7rem; letter-spacing:.02em; backdrop-filter:blur(4px); }
-    .recommendation-badge { position:absolute; top:9px; right:9px; padding:5px 8px; color:#382018; background:#f6dfaa; border-radius:999px; box-shadow:0 4px 12px rgba(34,24,17,.18); font-size:.7rem; font-weight:800; }
+    .art-crop { position:relative; display:block; aspect-ratio:1.42/1; overflow:hidden; background:#cabda9; }
+    .art-crop img { position:absolute; top:0; height:100%; width:300%; max-width:none; object-fit:cover; }
+    .style-card[data-style="oil"] img { left:0; }
+    .style-card[data-style="watercolor"] img { left:-100%; }
+    .style-card[data-style="engraving"] img { left:-200%; }
     .style-card-copy { display:block; padding:16px; }
     .style-name { display:flex; align-items:center; justify-content:space-between; gap:8px; font:500 1.18rem/1.25 Georgia,"Noto Serif KR",serif; }
     .choice-mark { opacity:0; display:grid; place-items:center; width:22px; height:22px; color:#fff; background:var(--wine); border-radius:50%; font:700 .75rem/1 system-ui,sans-serif; }
@@ -255,6 +236,36 @@
     .style-desc { display:block; margin-top:6px; color:var(--muted); font-size:.88rem; line-height:1.5; }
     .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
     .tag { padding:3px 8px; color:var(--wine-deep); background:#efe2d5; border-radius:999px; font-size:.74rem; }
+
+    .style-subtitle { margin:0 0 10px; font-size:1.05rem; }
+    .style-toggle-section { margin-top:24px; padding-top:20px; border-top:1px solid var(--line); }
+    .style-toggle-heading { display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:12px; }
+    .style-toggle-heading h3 { margin:0; font-size:1.18rem; }
+    .style-toggle-heading p { margin:0; color:var(--muted); font-size:.84rem; }
+    .style-toggle-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+    .style-toggle {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      min-height:78px;
+      padding:13px 14px;
+      text-align:left;
+      background:#fffdf8;
+      border:1px solid var(--line);
+      border-radius:12px;
+      cursor:pointer;
+      transition:border-color .18s ease,background .18s ease,transform .18s ease;
+    }
+    .style-toggle:hover { transform:translateY(-1px); border-color:#a98f74; }
+    .style-toggle[aria-pressed="true"] { background:#f0e2d5; border-color:var(--wine); box-shadow:0 0 0 2px rgba(131,56,47,.1); }
+    .style-toggle-copy { min-width:0; }
+    .style-toggle-copy strong { display:block; font-size:.95rem; }
+    .style-toggle-copy span { display:block; margin-top:3px; color:var(--muted); font-size:.8rem; line-height:1.4; }
+    .toggle-side { display:flex; flex:0 0 auto; align-items:center; gap:7px; }
+    .toggle-recommendation { padding:3px 7px; color:var(--wine-deep); background:#f6dfaa; border-radius:999px; font-size:.68rem; font-weight:800; }
+    .toggle-state { min-width:46px; padding:5px 8px; color:var(--muted); background:var(--paper); border:1px solid var(--line); border-radius:999px; text-align:center; font-size:.72rem; font-weight:750; }
+    .style-toggle[aria-pressed="true"] .toggle-state { color:#fff; background:var(--wine); border-color:var(--wine); }
 
     .style-search {
       margin-top:18px;
@@ -404,6 +415,7 @@
       .workspace-heading,.project-grid,.bible-layout,.sound-layout,.scene-detail { grid-template-columns:1fr; }
       .brief-panel,.sound-controls { border-right:0; border-bottom:1px solid var(--line); }
       .style-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .style-toggle-list { grid-template-columns:1fr; }
       .scene-strip { grid-template-columns:repeat(5,1fr); }
       .heading-note { display:none; }
       .section-head { align-items:flex-start; flex-direction:column; gap:6px; }
@@ -417,6 +429,7 @@
       .project-facts,.bible-rules { grid-template-columns:1fr; }
       .style-grid,.style-search-row { grid-template-columns:1fr; }
       .style-recommendation { align-items:flex-start; flex-direction:column; }
+      .style-toggle-heading { align-items:flex-start; flex-direction:column; gap:4px; }
       .segmented,.service-select { grid-template-columns:1fr; }
       .story-entry { grid-template-columns:1fr; }
       .apply-story { width:100%; }
@@ -511,11 +524,16 @@
       <div class="style-lab surface">
         <div class="style-recommendation" aria-live="polite">
           <strong id="style-recommendation-title">현재 작품에 어울리는 화풍을 먼저 보여드려요.</strong>
-          <span>각 카드의 색·질감 예시와 쉬운 설명을 보고 선택하세요.</span>
+          <span>대표 3가지는 장면으로 비교하고, 나머지는 설명 토글로 빠르게 선택하세요.</span>
         </div>
+        <h3 class="style-subtitle">같은 장면 미리보기</h3>
         <div class="style-grid" id="style-grid" aria-label="선택할 수 있는 그림 스타일"></div>
+        <div class="style-toggle-section">
+          <div class="style-toggle-heading"><h3>더 많은 화풍</h3><p>이미지 미리보기 없이 이름과 설명을 보고 선택합니다.</p></div>
+          <div class="style-toggle-list" id="style-toggle-list" aria-label="추가 그림 스타일"></div>
+        </div>
         <div class="style-detail" aria-live="polite">
-          <div><h3 id="style-detail-name">유화</h3><p id="style-detail-description">풍부한 질감과 깊이감이 살아나는 정통 회화 스타일입니다.</p></div>
+          <div><h3 id="style-detail-name">낭만주의 유화</h3><p id="style-detail-description">인물 사이의 긴장과 말하지 못한 감정을 깊은 색, 날씨, 방향성 있는 빛으로 표현합니다.</p></div>
           <dl class="detail-list">
             <div><dt>볼 것</dt><dd id="style-watch">겹쳐진 색과 붓 자국의 깊이</dd></div>
             <div><dt>잘 맞는 장면</dt><dd id="style-scenes">비 속의 청혼 · 오해 · 재회</dd></div>
@@ -612,7 +630,8 @@
   <script>
     (function () {
       const STORAGE_KEY='scene-palette-state-v3';
-      const STYLE_KEYS=['watercolor','oil','impressionism','postImpressionism','realism','surrealism','expressionism','romanticism','modernArt','contemporary','abstract','minimal','digital','pastel','acrylic','gouache','inkWash','oriental','sumukhColor','artNouveau','artDeco','vintageIllustration','fantasy','dreamscape','cinematic','photorealism','hyperrealism','painterly','textured'];
+      const FEATURED_STYLE_KEYS=['oil','watercolor','engraving'];
+      const STYLE_KEYS=FEATURED_STYLE_KEYS.concat(['impressionism','postImpressionism','realism','surrealism','expressionism','romanticism','modernArt','contemporary','abstract','minimal','digital','pastel','acrylic','gouache','inkWash','oriental','sumukhColor','artNouveau','artDeco','vintageIllustration','fantasy','dreamscape','cinematic','photorealism','hyperrealism','painterly','textured']);
       const defaultState={story:'',moods:['절제된 설렘','우아함'],duration:'2분 30초',style:'oil',sound:'restrained',service:'suno',scene:0};
       function readSavedState(){
         try {
@@ -633,8 +652,9 @@
       if(!Number.isInteger(state.scene)||state.scene<0||state.scene>19) state.scene=0;
       function visualStyle(name,description,tags,palette,texture,watch,note,light,composition){return {name:name,description:description,tags:tags,palette:palette,texture:texture,watch:watch,note:note,light:light,composition:composition};}
       const styleData = {
-        watercolor:visualStyle('수채화','맑고 부드러운 번짐으로 따뜻한 감성을 살리는 화풍입니다.',['맑은 번짐','여백','따뜻함'],['#70958d','#b9cfca','#e8c8ac','#f7efe2'],'wash','색의 경계가 종이 위에서 자연스럽게 번지는 모습','투명한 물감과 포근한 종이결','밝고 고르게 퍼지는 자연광','여백과 시선으로 친밀함 표현'),
-        oil:visualStyle('유화','풍부한 질감과 깊이감이 살아나는 정통 회화 스타일입니다.',['깊은 색','붓 자국','정통 회화'],['#263c34','#614739','#bc8b52','#ead4ae'],'texture','겹쳐진 색과 붓 자국의 깊이','겹겹이 쌓인 물감과 묵직한 색','방향성 있는 창가 빛과 따뜻한 촛불','인물 사이의 거리로 감정 표현'),
+        oil:visualStyle('낭만주의 유화','깊은 색과 빛으로 말하지 못한 감정을 크게 보여줘요.',['극적인','깊은 색','캔버스 질감'],['#253d35','#584135','#b88c54','#e7d7b9'],'texture','빛의 방향과 인물 사이의 거리','폭풍 전의 고요함처럼 깊고 절제된 색','흐린 창가 빛과 따뜻한 촛불','인물 사이의 거리로 감정 표현'),
+        watercolor:visualStyle('수채화 동화책','색의 번짐과 여백으로 조용한 설렘을 부드럽게 담아요.',['서정적','맑은 색','종이 질감'],['#6f8f82','#c5a7a0','#e5cfaa','#f2eadc'],'wash','색의 번짐과 비어 있는 공간','옅은 날씨와 종이에 번지는 다정한 색','밝고 고르게 퍼지는 자연광','여백과 시선으로 친밀함 표현'),
+        engraving:visualStyle('고전 판화','촘촘한 선과 절제된 색으로 오래된 소설 삽화처럼 보여요.',['고전적','정교한 선','단색'],['#3d372f','#766c5d','#b0a18a','#ddcfb5'],'ink','선의 밀도와 검정·종이색의 대비','오래된 책장처럼 절제된 단색','선의 밀도로 표현한 명암','정교한 윤곽과 균형 잡힌 장면'),
         impressionism:visualStyle('인상주의','빛과 색의 순간적인 인상을 감각적으로 표현하는 화풍입니다.',['빛의 조각','야외','생동감'],['#7396a7','#d8b66f','#d78672','#eef0d0'],'dots','가까이에서는 붓 자국, 멀리서는 빛으로 보이는 효과','짧은 붓질이 만드는 반짝이는 공기','시간대에 따라 흔들리는 자연광','순간을 포착한 비대칭 구도'),
         postImpressionism:visualStyle('후기 인상주의','감정과 화면의 구조감을 인상주의보다 더 강조한 표현 방식입니다.',['강한 색','구조감','개성'],['#243e68','#d6a72f','#b54d35','#e8d7a8'],'brush','과감한 색 대비와 단단하게 정리된 형태','감정적인 색과 리듬 있는 면','색 자체가 빛처럼 느껴지는 조명','형태를 단순화한 안정적 구도'),
         realism:visualStyle('사실주의','실제 풍경처럼 자연스럽고 정교하게 묘사하는 스타일입니다.',['자연스러움','관찰','정교함'],['#405246','#7a6851','#b69a74','#ded2bb'],'real','일상의 표정, 재료, 공간이 과장 없이 보이는지','현실적인 재료감과 차분한 색','실제 환경에 맞는 자연광','생활 장면처럼 설득력 있는 시점'),
@@ -855,28 +875,33 @@
       }
       function renderStyleCards(){
         const grid=document.getElementById('style-grid');
+        const toggleList=document.getElementById('style-toggle-list');
         const recommended=recommendedStyleKeys(state.story);
-        const ordered=recommended.concat(STYLE_KEYS.filter(function(key){return !recommended.includes(key);}));
+        const toggleKeys=STYLE_KEYS.filter(function(key){return !FEATURED_STYLE_KEYS.includes(key);});
+        const orderedToggles=recommended.filter(function(key){return toggleKeys.includes(key);}).concat(toggleKeys.filter(function(key){return !recommended.includes(key);}));
         const recommendedNames=recommended.slice(0,3).map(function(key){return styleData[key].name;});
         const recommendationLabel=state.story?'《'+state.story+'》 추천':'새 프로젝트 추천';
         document.getElementById('style-recommendation-title').textContent=recommendationLabel+': '+recommendedNames.join(' · ');
-        grid.innerHTML=ordered.map(function(key){
+        grid.innerHTML=FEATURED_STYLE_KEYS.map(function(key){
           const d=styleData[key];
-          const rank=recommended.indexOf(key);
-          const colors=d.palette.map(function(color,index){return '--c'+(index+1)+':'+color;}).join(';');
-          const badge=rank>-1?'<span class="recommendation-badge">추천 '+(rank+1)+'</span>':'';
           const tags=d.tags.map(function(tag){return '<span class="tag">'+tag+'</span>';}).join('');
-          return '<button class="style-card" type="button" aria-pressed="'+String(key===state.style)+'" data-style="'+key+'" style="'+colors+'">'+
-            '<span class="style-preview" data-texture="'+d.texture+'" aria-hidden="true"><span class="preview-caption">색·질감 예시</span>'+badge+'</span>'+
+          return '<button class="style-card" type="button" aria-pressed="'+String(key===state.style)+'" data-style="'+key+'">'+
+            '<span class="art-crop"><img src="assets/style-triptych.png" alt="같은 장면을 '+d.name+'로 표현한 예시"></span>'+
             '<span class="style-card-copy"><span class="style-name">'+d.name+' <span class="choice-mark">✓</span></span><span class="style-desc">'+d.description+'</span><span class="tag-list">'+tags+'</span></span></button>';
         }).join('');
-        grid.querySelectorAll('.style-card').forEach(function(btn){btn.addEventListener('click',function(){selectStyle(btn.dataset.style);saveState();});});
+        toggleList.innerHTML=orderedToggles.map(function(key){
+          const d=styleData[key];
+          const rank=recommended.indexOf(key);
+          const badge=rank>-1?'<span class="toggle-recommendation">작품 추천 '+(rank+1)+'</span>':'';
+          return '<button class="style-toggle" type="button" aria-pressed="'+String(key===state.style)+'" data-style="'+key+'"><span class="style-toggle-copy"><strong>'+d.name+'</strong><span>'+d.description+'</span></span><span class="toggle-side">'+badge+'<span class="toggle-state">선택</span></span></button>';
+        }).join('');
+        document.querySelectorAll('.style-card,.style-toggle').forEach(function(btn){btn.addEventListener('click',function(){selectStyle(btn.dataset.style);saveState();});});
       }
       function syncControlsFromState(){
         document.getElementById('story-input').value='';
         document.querySelectorAll('#mood-chips .chip').forEach(function(el){el.setAttribute('aria-pressed',String(state.moods.includes(el.textContent)));});
         document.querySelectorAll('#duration-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.duration===state.duration));});
-        document.querySelectorAll('.style-card').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.style===state.style));});
+        document.querySelectorAll('.style-card,.style-toggle').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.style===state.style));});
         document.querySelectorAll('.sound-route').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.sound===state.sound));});
         document.querySelectorAll('#service-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.service===state.service));});
         document.getElementById('save-state-text').textContent=savedState?'이 기기에 저장됨':'이 기기에 자동 저장';
@@ -896,7 +921,7 @@
       function selectStyle(style){
         if(!styleData[style]) return;
         state.style=style;
-        document.querySelectorAll('.style-card').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.style===style));});
+        document.querySelectorAll('.style-card,.style-toggle').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.style===style));});
         const d=styleData[style];
         document.getElementById('style-detail-name').textContent=d.name;
         document.getElementById('style-detail-description').textContent=d.description;

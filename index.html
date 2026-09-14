@@ -197,18 +197,20 @@
     .section-head p { max-width:560px; margin:0; color:var(--muted); }
 
     .style-lab { padding:22px; }
-    .view-tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
-    .tab {
-      min-height:42px;
-      padding:8px 13px;
-      color:var(--muted);
-      background:transparent;
-      border:1px solid transparent;
-      border-radius:999px;
-      cursor:pointer;
+    .style-recommendation {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+      padding:15px 17px;
+      color:var(--ink);
+      background:#f0e4d5;
+      border:1px solid #dbc5aa;
+      border-radius:14px;
     }
-    .tab[aria-selected="true"] { color:var(--ink); background:var(--paper-deep); border-color:var(--line); }
-
+    .style-recommendation strong { color:var(--wine-deep); }
+    .style-recommendation span { color:var(--muted); font-size:.88rem; }
     .style-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
     .style-card {
       overflow:hidden;
@@ -222,11 +224,30 @@
     }
     .style-card:hover { transform:translateY(-3px); box-shadow:0 14px 30px rgba(48,35,24,.12); }
     .style-card[aria-pressed="true"] { border-color:var(--wine); box-shadow:0 0 0 3px rgba(131,56,47,.14); }
-    .art-crop { position:relative; display:block; aspect-ratio:1.42/1; overflow:hidden; background:#cabda9; }
-    .art-crop img { position:absolute; top:0; height:100%; width:300%; max-width:none; object-fit:cover; }
-    .style-card[data-style="oil"] img { left:0; }
-    .style-card[data-style="watercolor"] img { left:-100%; }
-    .style-card[data-style="engraving"] img { left:-200%; }
+    .style-preview {
+      position:relative;
+      display:block;
+      aspect-ratio:1.75/1;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 23% 28%,var(--c3) 0 7%,transparent 8%),
+        radial-gradient(circle at 70% 38%,var(--c4) 0 12%,transparent 13%),
+        linear-gradient(142deg,var(--c1),var(--c2) 48%,var(--c3));
+      isolation:isolate;
+    }
+    .style-preview::before,.style-preview::after { content:""; position:absolute; inset:0; z-index:-1; }
+    .style-preview::before { opacity:.62; mix-blend-mode:screen; }
+    .style-preview::after { opacity:.26; mix-blend-mode:multiply; }
+    .style-preview[data-texture="wash"]::before { inset:-16%; background:radial-gradient(ellipse at 28% 52%,var(--c4),transparent 38%),radial-gradient(ellipse at 76% 36%,var(--c3),transparent 34%); filter:blur(12px); }
+    .style-preview[data-texture="brush"]::before { background:repeating-linear-gradient(164deg,transparent 0 9px,var(--c4) 10px 13px,transparent 14px 22px); transform:scale(1.2) rotate(-3deg); }
+    .style-preview[data-texture="dots"]::before { background:radial-gradient(circle,var(--c4) 0 2px,transparent 2.5px); background-size:13px 13px; }
+    .style-preview[data-texture="graphic"]::before { background:linear-gradient(45deg,transparent 31%,var(--c4) 32% 45%,transparent 46%),linear-gradient(-45deg,transparent 57%,var(--c3) 58% 68%,transparent 69%); }
+    .style-preview[data-texture="dream"]::before { inset:-20%; background:conic-gradient(from 40deg at 50% 50%,var(--c4),transparent,var(--c3),transparent,var(--c4)); filter:blur(16px); }
+    .style-preview[data-texture="ink"]::before { background:radial-gradient(ellipse at 30% 70%,var(--c1) 0 4%,transparent 5%),linear-gradient(104deg,transparent 38%,var(--c4) 39% 42%,transparent 43%); filter:contrast(1.25); }
+    .style-preview[data-texture="real"]::before { background:linear-gradient(175deg,transparent 0 52%,var(--c1) 53% 65%,var(--c2) 66% 100%); opacity:.46; }
+    .style-preview[data-texture="texture"]::after { background:repeating-linear-gradient(88deg,rgba(30,23,18,.42) 0 2px,transparent 2px 7px),repeating-linear-gradient(4deg,transparent 0 5px,rgba(255,255,255,.28) 6px 8px); }
+    .preview-caption { position:absolute; left:11px; bottom:9px; padding:4px 8px; color:#fff; background:rgba(28,23,20,.68); border-radius:999px; font-size:.7rem; letter-spacing:.02em; backdrop-filter:blur(4px); }
+    .recommendation-badge { position:absolute; top:9px; right:9px; padding:5px 8px; color:#382018; background:#f6dfaa; border-radius:999px; box-shadow:0 4px 12px rgba(34,24,17,.18); font-size:.7rem; font-weight:800; }
     .style-card-copy { display:block; padding:16px; }
     .style-name { display:flex; align-items:center; justify-content:space-between; gap:8px; font:500 1.18rem/1.25 Georgia,"Noto Serif KR",serif; }
     .choice-mark { opacity:0; display:grid; place-items:center; width:22px; height:22px; color:#fff; background:var(--wine); border-radius:50%; font:700 .75rem/1 system-ui,sans-serif; }
@@ -234,6 +255,19 @@
     .style-desc { display:block; margin-top:6px; color:var(--muted); font-size:.88rem; line-height:1.5; }
     .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
     .tag { padding:3px 8px; color:var(--wine-deep); background:#efe2d5; border-radius:999px; font-size:.74rem; }
+
+    .style-search {
+      margin-top:18px;
+      padding:18px;
+      background:#fffdf8;
+      border:1px solid var(--line);
+      border-radius:var(--radius-md);
+    }
+    .style-search label { display:block; margin-bottom:9px; font-weight:750; }
+    .style-search-row { display:grid; grid-template-columns:1fr auto; gap:9px; }
+    .style-search input[type="search"] { min-width:0; padding:12px 13px; color:var(--ink); background:#fff; border:1px solid var(--line); border-radius:10px; font-size:1rem; }
+    .style-search button { padding:11px 16px; color:#fff; background:var(--wine); border:0; border-radius:10px; font-weight:750; cursor:pointer; }
+    .style-search p { margin:8px 0 0; color:var(--muted); font-size:.82rem; }
 
     .style-detail {
       display:grid;
@@ -251,17 +285,6 @@
     .detail-list div { display:grid; grid-template-columns:70px 1fr; gap:10px; padding-bottom:7px; border-bottom:1px solid rgba(255,255,255,.08); }
     .detail-list dt { color:#bfa072; font-size:.8rem; }
     .detail-list dd { margin:0; font-size:.88rem; }
-
-    .comparison-table { width:100%; border-collapse:collapse; }
-    .comparison-table th,.comparison-table td { padding:13px 12px; text-align:left; border-bottom:1px solid var(--line); }
-    .comparison-table th { color:var(--wine); font-size:.82rem; }
-    .comparison-table td { color:var(--muted); }
-
-    .reference-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
-    .reference-card { min-height:150px; padding:18px; background:#fffdf8; border:1px solid var(--line); border-radius:var(--radius-md); }
-    .reference-card strong { display:block; font:500 1.08rem/1.3 Georgia,"Noto Serif KR",serif; }
-    .reference-card p { color:var(--muted); font-size:.88rem; }
-    .reference-card a { color:var(--wine); font-size:.86rem; font-weight:650; }
 
     .bible-layout { display:grid; grid-template-columns:.72fr 1.28fr; gap:16px; padding:20px; }
     .palette-card { padding:22px; color:#f8f0e4; background:var(--forest); border-radius:var(--radius-md); }
@@ -306,6 +329,21 @@
     .output-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:12px; }
 
     .storyboard { padding:22px; }
+    .storyboard-apply-alert {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:18px;
+      padding:15px 17px;
+      color:#5f2621;
+      background:#fff3d9;
+      border:1px solid #d8b36e;
+      border-radius:var(--radius-md);
+    }
+    .storyboard-apply-alert strong,.storyboard-apply-alert span { display:block; }
+    .storyboard-apply-alert span { margin-top:2px; color:#786341; font-size:.86rem; }
+    .storyboard-apply-alert button { flex:0 0 auto; }
     .scene-strip { display:grid; grid-template-columns:repeat(10,1fr); gap:7px; margin-bottom:18px; }
     .scene-dot {
       min-height:42px;
@@ -365,8 +403,7 @@
     @media (max-width:900px) {
       .workspace-heading,.project-grid,.bible-layout,.sound-layout,.scene-detail { grid-template-columns:1fr; }
       .brief-panel,.sound-controls { border-right:0; border-bottom:1px solid var(--line); }
-      .style-grid,.reference-grid { grid-template-columns:1fr; }
-      .art-crop { aspect-ratio:2.1/1; }
+      .style-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .scene-strip { grid-template-columns:repeat(5,1fr); }
       .heading-note { display:none; }
       .section-head { align-items:flex-start; flex-direction:column; gap:6px; }
@@ -378,9 +415,13 @@
       h1 { font-size:2.35rem; }
       .brief-panel,.brief-preview,.style-lab,.bible-layout,.sound-controls,.sound-output,.storyboard { padding:18px; }
       .project-facts,.bible-rules { grid-template-columns:1fr; }
+      .style-grid,.style-search-row { grid-template-columns:1fr; }
+      .style-recommendation { align-items:flex-start; flex-direction:column; }
       .segmented,.service-select { grid-template-columns:1fr; }
       .story-entry { grid-template-columns:1fr; }
       .apply-story { width:100%; }
+      .storyboard-apply-alert { align-items:stretch; flex-direction:column; }
+      .storyboard-apply-alert button { width:100%; }
       .scene-strip { grid-template-columns:repeat(4,1fr); }
       .export-bar { align-items:stretch; flex-direction:column; }
       .export-actions { flex-direction:column; }
@@ -400,7 +441,7 @@
       <a href="#sound">음악</a>
       <a href="#storyboard">스토리보드</a>
     </nav>
-    <span class="save-state"><span class="save-dot"></span>이 기기에 자동 저장</span>
+    <span class="save-state" aria-live="polite"><span class="save-dot"></span><span id="save-state-text">이 기기에 자동 저장</span></span>
   </header>
 
   <main>
@@ -425,7 +466,7 @@
             <input class="text-input" id="story-input" value="" placeholder="예: 오디세이아, 오만과 편견, 내가 쓴 동화" aria-describedby="story-apply-help">
             <button class="primary-action apply-story" type="button" id="apply-story" disabled>전체 적용하기</button>
           </div>
-          <p class="story-help" id="story-apply-help" role="status">현재는 《오만과 편견》 예시입니다. 작품명을 입력한 뒤 전체 적용하기를 눌러주세요.</p>
+          <p class="story-help" id="story-apply-help" role="status">작품명을 입력한 뒤 전체 적용하기를 눌러주세요.</p>
         </div>
         <div class="field">
           <span>원하는 감정</span>
@@ -449,7 +490,7 @@
       <div class="brief-preview">
         <div class="project-card">
           <p class="section-label">현재 프로젝트</p>
-          <h2 id="project-name">오만과 편견</h2>
+          <h2 id="project-name">프로젝트(작품명)을 입력하세요</h2>
           <p id="project-summary">절제된 설렘과 우아함을 담은 회화적 뮤직비디오</p>
           <div class="project-facts">
             <div class="project-fact"><small>길이</small><strong id="summary-duration">2분 30초</strong></div>
@@ -468,67 +509,26 @@
         <p>인물과 구도는 같고 표현만 다릅니다. 이름을 이해하려 애쓰기 전에 마음이 끌리는 화면을 먼저 골라보세요.</p>
       </div>
       <div class="style-lab surface">
-        <div class="view-tabs" role="tablist" aria-label="스타일을 보는 방법">
-          <button class="tab" type="button" role="tab" aria-selected="true" data-view="same">같은 장면 비교</button>
-          <button class="tab" type="button" role="tab" aria-selected="false" data-view="features">특징만 비교</button>
-          <button class="tab" type="button" role="tab" aria-selected="false" data-view="references">실제 작품으로 확인</button>
+        <div class="style-recommendation" aria-live="polite">
+          <strong id="style-recommendation-title">현재 작품에 어울리는 화풍을 먼저 보여드려요.</strong>
+          <span>각 카드의 색·질감 예시와 쉬운 설명을 보고 선택하세요.</span>
         </div>
-
-        <div id="view-same">
-          <div class="style-grid">
-            <button class="style-card" type="button" aria-pressed="true" data-style="oil">
-              <span class="art-crop"><img src="assets/style-triptych.png" alt="섭정시대 도서관 장면을 낭만주의 유화로 표현한 예시"></span>
-              <span class="style-card-copy">
-                <span class="style-name">낭만주의 유화 <span class="choice-mark">✓</span></span>
-                <span class="style-desc">깊은 색과 빛으로 말하지 못한 감정을 크게 보여줘요.</span>
-                <span class="tag-list"><span class="tag">극적인</span><span class="tag">깊은 색</span><span class="tag">캔버스 질감</span></span>
-              </span>
-            </button>
-            <button class="style-card" type="button" aria-pressed="false" data-style="watercolor">
-              <span class="art-crop"><img src="assets/style-triptych.png" alt="같은 도서관 장면을 수채화 동화책으로 표현한 예시"></span>
-              <span class="style-card-copy">
-                <span class="style-name">수채화 동화책 <span class="choice-mark">✓</span></span>
-                <span class="style-desc">색의 번짐과 여백으로 조용한 설렘을 부드럽게 담아요.</span>
-                <span class="tag-list"><span class="tag">서정적</span><span class="tag">맑은 색</span><span class="tag">종이 질감</span></span>
-              </span>
-            </button>
-            <button class="style-card" type="button" aria-pressed="false" data-style="engraving">
-              <span class="art-crop"><img src="assets/style-triptych.png" alt="같은 도서관 장면을 고전 판화로 표현한 예시"></span>
-              <span class="style-card-copy">
-                <span class="style-name">고전 판화 <span class="choice-mark">✓</span></span>
-                <span class="style-desc">촘촘한 선과 절제된 색으로 오래된 소설 삽화처럼 보여요.</span>
-                <span class="tag-list"><span class="tag">고전적</span><span class="tag">정교한 선</span><span class="tag">단색</span></span>
-              </span>
-            </button>
+        <div class="style-grid" id="style-grid" aria-label="선택할 수 있는 그림 스타일"></div>
+        <div class="style-detail" aria-live="polite">
+          <div><h3 id="style-detail-name">유화</h3><p id="style-detail-description">풍부한 질감과 깊이감이 살아나는 정통 회화 스타일입니다.</p></div>
+          <dl class="detail-list">
+            <div><dt>볼 것</dt><dd id="style-watch">겹쳐진 색과 붓 자국의 깊이</dd></div>
+            <div><dt>잘 맞는 장면</dt><dd id="style-scenes">비 속의 청혼 · 오해 · 재회</dd></div>
+          </dl>
+        </div>
+        <form class="style-search" id="style-search" action="https://www.google.com/search" method="get" target="_blank" rel="noreferrer">
+          <label for="style-search-input">Google에서 화풍 예시 더 찾아보기</label>
+          <div class="style-search-row">
+            <input id="style-search-input" type="search" name="q" value="유화 화풍 대표 그림" placeholder="예: 아르누보 그림 화풍" required>
+            <button type="submit">Google 검색 ↗</button>
           </div>
-          <div class="style-detail" aria-live="polite">
-            <div><h3 id="style-detail-name">낭만주의 유화</h3><p id="style-detail-description">인물 사이의 긴장과 말하지 못한 감정을 깊은 색, 날씨, 방향성 있는 빛으로 표현합니다.</p></div>
-            <dl class="detail-list">
-              <div><dt>볼 것</dt><dd id="style-watch">빛의 방향과 인물 사이의 거리</dd></div>
-              <div><dt>잘 맞는 장면</dt><dd id="style-scenes">비 속의 청혼 · 오해 · 재회</dd></div>
-            </dl>
-          </div>
-        </div>
-
-        <div id="view-features" hidden>
-          <table class="comparison-table">
-            <thead><tr><th>비교 항목</th><th>낭만주의 유화</th><th>수채화 동화책</th><th>고전 판화</th></tr></thead>
-            <tbody>
-              <tr><th>빛</th><td>극적이고 방향성이 강함</td><td>밝고 부드럽게 퍼짐</td><td>선의 밀도로 표현</td></tr>
-              <tr><th>색</th><td>깊고 어두운 색</td><td>옅고 맑은 색</td><td>단색 또는 제한된 색</td></tr>
-              <tr><th>질감</th><td>붓 자국과 캔버스</td><td>물감 번짐과 종이</td><td>촘촘한 선과 종이</td></tr>
-              <tr><th>느낌</th><td>웅장하고 감정적</td><td>친밀하고 서정적</td><td>절제되고 고전적</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div id="view-references" hidden>
-          <div class="reference-grid">
-            <article class="reference-card"><strong>토머스 로렌스</strong><p>인물의 표정, 자세, 섭정시대 의상과 옷감 표현을 살펴보세요.</p><a href="https://www.npg.org.uk/collections/search/person/mp02632/sir-thomas-lawrence" target="_blank" rel="noreferrer">영국 국립초상화미술관에서 보기 ↗</a></article>
-            <article class="reference-card"><strong>존 컨스터블</strong><p>영국 들판과 흐린 하늘, 저택을 감싸는 자연의 색을 살펴보세요.</p><a href="https://www.tate.org.uk/art/artists/john-constable-108" target="_blank" rel="noreferrer">테이트에서 보기 ↗</a></article>
-            <article class="reference-card"><strong>J. M. W. 터너</strong><p>빛과 날씨가 장면의 감정을 얼마나 크게 바꾸는지 살펴보세요.</p><a href="https://www.tate.org.uk/art/artists/joseph-mallord-william-turner-558" target="_blank" rel="noreferrer">테이트에서 보기 ↗</a></article>
-          </div>
-        </div>
+          <p>선택한 화풍 이름이 자동으로 입력됩니다. 검색 결과는 새 창에서 열립니다.</p>
+        </form>
       </div>
     </section>
 
@@ -585,10 +585,14 @@
 
     <section class="step-section" id="storyboard" aria-labelledby="storyboard-title">
       <div class="section-head">
-        <div><p class="section-label">4 · 20장 스토리보드</p><h2 id="storyboard-title">음악을 따라 흐르는 고전 드라마</h2></div>
+        <div><p class="section-label">4 · 20장 스토리보드</p><h2 id="storyboard-title">프로젝트(작품명)을 입력하세요</h2></div>
         <p>장면 번호를 누르면 이야기 역할, 시간, 화면 제작문을 확인할 수 있습니다.</p>
       </div>
       <div class="storyboard surface">
+        <div class="storyboard-apply-alert" id="storyboard-apply-alert" role="status" hidden>
+          <div><strong id="storyboard-pending-title">입력한 작품명이 아직 적용되지 않았습니다.</strong><span>아래 20장은 현재 적용된 작품의 내용입니다.</span></div>
+          <button class="primary-action" type="button" id="apply-storyboard">여기서 전체 적용하기</button>
+        </div>
         <div class="scene-strip" id="scene-strip" aria-label="장면 선택"></div>
         <div class="scene-detail" aria-live="polite">
           <div class="scene-meta"><small id="scene-time">00:00–00:08 · 도입</small><h3 id="scene-title">흐린 아침의 롱번</h3><p id="scene-description">영국 시골의 넓은 풍경과 베넷가의 저택으로 이야기의 세계를 엽니다.</p></div>
@@ -607,11 +611,57 @@
 
   <script>
     (function () {
-      const state = { story:'오만과 편견', moods:['절제된 설렘','우아함'], duration:'2분 30초', style:'oil', sound:'restrained', service:'suno', scene:0 };
+      const STORAGE_KEY='scene-palette-state-v3';
+      const STYLE_KEYS=['watercolor','oil','impressionism','postImpressionism','realism','surrealism','expressionism','romanticism','modernArt','contemporary','abstract','minimal','digital','pastel','acrylic','gouache','inkWash','oriental','sumukhColor','artNouveau','artDeco','vintageIllustration','fantasy','dreamscape','cinematic','photorealism','hyperrealism','painterly','textured'];
+      const defaultState={story:'',moods:['절제된 설렘','우아함'],duration:'2분 30초',style:'oil',sound:'restrained',service:'suno',scene:0};
+      function readSavedState(){
+        try {
+          const value=localStorage.getItem(STORAGE_KEY);
+          if(!value) return null;
+          const parsed=JSON.parse(value);
+          return parsed&&typeof parsed==='object'?parsed:null;
+        } catch(error){return null;}
+      }
+      const savedState=readSavedState();
+      const state=Object.assign({},defaultState,savedState||{});
+      state.story='';
+      if(!Array.isArray(state.moods)) state.moods=defaultState.moods.slice();
+      if(!['2분','2분 30초','3분'].includes(state.duration)) state.duration=defaultState.duration;
+      if(!STYLE_KEYS.includes(state.style)) state.style=defaultState.style;
+      if(!['restrained','playful','crescendo'].includes(state.sound)) state.sound=defaultState.sound;
+      if(!['suno','flow','both'].includes(state.service)) state.service=defaultState.service;
+      if(!Number.isInteger(state.scene)||state.scene<0||state.scene>19) state.scene=0;
+      function visualStyle(name,description,tags,palette,texture,watch,note,light,composition){return {name:name,description:description,tags:tags,palette:palette,texture:texture,watch:watch,note:note,light:light,composition:composition};}
       const styleData = {
-        oil:{name:'낭만주의 유화',description:'인물 사이의 긴장과 말하지 못한 감정을 깊은 색, 날씨, 방향성 있는 빛으로 표현합니다.',watch:'빛의 방향과 인물 사이의 거리',scenes:'비 속의 청혼 · 오해 · 재회',palette:['#253d35','#584135','#b88c54','#e7d7b9'],note:'폭풍 전의 고요함처럼 깊고 절제된 색',light:'흐린 창가 빛과 따뜻한 촛불',composition:'인물 사이의 거리로 감정 표현'},
-        watercolor:{name:'수채화 동화책',description:'부드러운 색의 번짐과 여백으로 인물의 내면과 조용한 설렘을 표현합니다.',watch:'색의 번짐과 비어 있는 공간',scenes:'편지 · 산책 · 가족의 일상',palette:['#6f8f82','#c5a7a0','#e5cfaa','#f2eadc'],note:'옅은 날씨와 종이에 번지는 다정한 색',light:'밝고 고르게 퍼지는 자연광',composition:'여백과 시선으로 친밀함 표현'},
-        engraving:{name:'고전 판화',description:'촘촘한 선과 절제된 색으로 원작 소설책의 삽화 같은 분위기를 만듭니다.',watch:'선의 밀도와 검정·종이색의 대비',scenes:'저택 소개 · 무도회 · 시대 배경',palette:['#3d372f','#766c5d','#b0a18a','#ddcfb5'],note:'오래된 책장처럼 절제된 단색',light:'선의 밀도로 표현한 명암',composition:'정교한 윤곽과 균형 잡힌 장면'}
+        watercolor:visualStyle('수채화','맑고 부드러운 번짐으로 따뜻한 감성을 살리는 화풍입니다.',['맑은 번짐','여백','따뜻함'],['#70958d','#b9cfca','#e8c8ac','#f7efe2'],'wash','색의 경계가 종이 위에서 자연스럽게 번지는 모습','투명한 물감과 포근한 종이결','밝고 고르게 퍼지는 자연광','여백과 시선으로 친밀함 표현'),
+        oil:visualStyle('유화','풍부한 질감과 깊이감이 살아나는 정통 회화 스타일입니다.',['깊은 색','붓 자국','정통 회화'],['#263c34','#614739','#bc8b52','#ead4ae'],'texture','겹쳐진 색과 붓 자국의 깊이','겹겹이 쌓인 물감과 묵직한 색','방향성 있는 창가 빛과 따뜻한 촛불','인물 사이의 거리로 감정 표현'),
+        impressionism:visualStyle('인상주의','빛과 색의 순간적인 인상을 감각적으로 표현하는 화풍입니다.',['빛의 조각','야외','생동감'],['#7396a7','#d8b66f','#d78672','#eef0d0'],'dots','가까이에서는 붓 자국, 멀리서는 빛으로 보이는 효과','짧은 붓질이 만드는 반짝이는 공기','시간대에 따라 흔들리는 자연광','순간을 포착한 비대칭 구도'),
+        postImpressionism:visualStyle('후기 인상주의','감정과 화면의 구조감을 인상주의보다 더 강조한 표현 방식입니다.',['강한 색','구조감','개성'],['#243e68','#d6a72f','#b54d35','#e8d7a8'],'brush','과감한 색 대비와 단단하게 정리된 형태','감정적인 색과 리듬 있는 면','색 자체가 빛처럼 느껴지는 조명','형태를 단순화한 안정적 구도'),
+        realism:visualStyle('사실주의','실제 풍경처럼 자연스럽고 정교하게 묘사하는 스타일입니다.',['자연스러움','관찰','정교함'],['#405246','#7a6851','#b69a74','#ded2bb'],'real','일상의 표정, 재료, 공간이 과장 없이 보이는지','현실적인 재료감과 차분한 색','실제 환경에 맞는 자연광','생활 장면처럼 설득력 있는 시점'),
+        surrealism:visualStyle('초현실주의','현실을 넘어선 몽환적이고 상징적인 분위기의 화풍입니다.',['꿈','상징','낯선 조합'],['#173a4d','#73548a','#d18573','#efc97f'],'dream','익숙한 사물들이 예상 밖의 관계를 만드는 방식','현실과 꿈이 겹치는 기묘한 색','논리를 벗어난 고요하고 선명한 빛','상징이 중심이 되는 비현실적 공간'),
+        expressionism:visualStyle('표현주의','인물의 감정과 장면의 분위기를 강하게 드러내는 화풍입니다.',['강한 감정','왜곡','대비'],['#39234d','#b53e36','#e19335','#e8d9b5'],'brush','형태와 색이 실제보다 감정을 더 크게 말하는 부분','거친 붓질과 강한 색채 대비','감정에 따라 과장된 명암','불안과 에너지가 느껴지는 사선 구도'),
+        romanticism:visualStyle('낭만주의','자연의 아름다움과 인간의 감성을 극적으로 살리는 스타일입니다.',['장엄함','감정','극적 자연'],['#213b42','#61404a','#b97848','#e6c88d'],'brush','거대한 자연과 인물의 감정이 만나는 순간','폭풍 전의 고요함처럼 깊은 색','구름을 가르는 극적인 빛','작은 인물과 큰 풍경의 대비'),
+        modernArt:visualStyle('현대미술','전통적 재현보다 해석과 분위기를 중시하는 현대적 표현입니다.',['해석','실험','현대적'],['#202d3c','#d4523f','#dfb93c','#e8e3d8'],'graphic','익숙한 소재를 새롭게 읽게 만드는 시각적 아이디어','대담한 색과 예상 밖의 재료감','개념을 강조하는 평면적 조명','의도적인 생략과 변형'),
+        contemporary:visualStyle('컨템포러리 아트','세련되고 감각적인 오늘날의 예술 스타일입니다.',['세련됨','감각적','현재성'],['#25262c','#6d8d8b','#d79c8b','#f0ece4'],'graphic','여백, 재료, 색이 만드는 현재적인 인상','절제된 색에 하나의 강한 포인트','깨끗하고 유연한 스튜디오 빛','편집 디자인처럼 세련된 배치'),
+        abstract:visualStyle('추상화','구체적 형태보다 색과 흐름, 감정을 중심으로 표현하는 화풍입니다.',['색의 흐름','감정','비구상'],['#27345d','#9c3d61','#df9c42','#ead7b8'],'dream','형태를 알아보지 않아도 감정이 전달되는 색과 리듬','겹치는 색면과 자유로운 흐름','색의 대비 자체가 만드는 빛','시선을 이끄는 선과 색의 리듬'),
+        minimal:visualStyle('미니멀 아트','요소를 절제해 깔끔하고 세련되게 표현하는 스타일입니다.',['절제','여백','깔끔함'],['#282a2d','#a79d90','#d4cbbb','#f5f1e9'],'graphic','적은 요소가 서로 이루는 비례와 빈 공간','매끈한 면과 제한된 색','그림자가 적은 균일한 빛','하나의 초점과 넓은 여백'),
+        digital:visualStyle('디지털 페인팅','회화 느낌을 디지털로 부드럽고 선명하게 구현하는 스타일입니다.',['선명함','부드러운 회화','디지털'],['#243653','#456f8e','#c26f65','#f0c58d'],'brush','깨끗한 가장자리와 회화적 질감이 만나는 지점','매끄러운 혼색과 제어된 붓결','영화처럼 정교하게 설계한 빛','읽기 쉬운 주인공 중심 구도'),
+        pastel:visualStyle('파스텔화','부드럽고 포근한 색감이 살아나는 화풍입니다.',['포근함','가루 질감','부드러운 색'],['#8499a3','#d4ada6','#e5cf9d','#f6eadf'],'wash','보송한 가장자리와 겹친 색의 부드러움','가루가 앉은 듯 포근한 표면','안개처럼 퍼지는 낮은 대비의 빛','둥글고 편안한 형태의 흐름'),
+        acrylic:visualStyle('아크릴화','선명한 색과 단단한 질감이 특징인 스타일입니다.',['선명한 색','단단한 면','활기'],['#1f5060','#cf4b3d','#e6a432','#f4e6c8'],'brush','빠르고 선명한 붓질과 불투명한 색면','또렷한 색층과 탄력 있는 붓결','명확한 하이라이트와 색 대비','큰 형태가 분명한 역동적 구도'),
+        gouache:visualStyle('구아슈','불투명하고 차분한 색면 표현이 매력적인 화풍입니다.',['불투명','차분함','색면'],['#3f6470','#b36a5e','#d3ad67','#eee3cd'],'graphic','벨벳처럼 무광인 색면과 또렷한 겹침','차분하고 불투명한 종이 위 색','부드럽지만 형태가 선명한 빛','동화책처럼 정돈된 화면'),
+        inkWash:visualStyle('잉크 워시','번짐과 농담으로 깊은 분위기를 만드는 스타일입니다.',['먹 번짐','농담','고요함'],['#1f2526','#4b5551','#98a19a','#e9e5db'],'ink','한 가지 색 안에서 달라지는 농도와 번짐','물과 잉크가 만든 우연한 가장자리','여백에서 스며드는 은은한 빛','붓의 흐름을 살린 간결한 구도'),
+        oriental:visualStyle('동양화','여백과 자연의 흐름을 중시하는 전통적 화풍입니다.',['여백','자연','전통'],['#283c37','#6d7c64','#b69a67','#eee4cf'],'ink','비어 있는 공간과 산수·인물이 이루는 호흡','담백한 먹과 자연에서 얻은 색','안개와 여백이 만드는 빛','시선이 천천히 이동하는 산수 구도'),
+        sumukhColor:visualStyle('수묵채색화','먹선과 은은한 색채를 함께 살리는 동양적 표현입니다.',['먹선','은은한 색','동양적'],['#253533','#62766c','#b77a65','#e5d7b9'],'ink','먹선의 힘과 절제된 색이 만나는 균형','먹의 농담 위에 얹힌 맑은 채색','종이 바탕을 살린 부드러운 빛','여백과 색 포인트가 균형 잡힌 화면'),
+        artNouveau:visualStyle('아르누보','유려한 곡선과 장식적인 아름다움이 돋보이는 스타일입니다.',['곡선','꽃 장식','우아함'],['#1f4b47','#a88145','#c77b6b','#eee0bd'],'graphic','머리카락, 식물, 테두리가 이어지는 유려한 선','보석빛 색과 섬세한 장식','금빛 장식처럼 평면적인 광채','인물을 감싸는 곡선형 프레임'),
+        artDeco:visualStyle('아르데코','고급스럽고 기하학적인 세련미가 있는 화풍입니다.',['기하학','고급스러움','대칭'],['#172f3b','#9b7137','#d2b56c','#eee6d3'],'graphic','직선과 부채꼴, 반복 무늬가 만드는 질서','검정·금색 중심의 매끈한 표면','대비가 선명한 무대 조명','대칭과 계단식 기하 구도'),
+        vintageIllustration:visualStyle('빈티지 일러스트','따뜻하고 클래식한 감성이 느껴지는 삽화 스타일입니다.',['클래식','따뜻함','책 삽화'],['#51483b','#8e765d','#c19b73','#e6d6b9'],'texture','바랜 종이색과 손으로 그린 듯한 윤곽','세월이 느껴지는 종이와 잉크','오래된 책처럼 따뜻한 낮은 대비','이야기 장면을 설명하는 안정적 구도'),
+        fantasy:visualStyle('판타지 아트','현실보다 더 아름답고 신비롭게 재해석하는 화풍입니다.',['마법','장대한 세계','신비'],['#1c3150','#594a86','#b8738c','#eacb8e'],'dream','현실적인 인물과 마법적 공간이 자연스럽게 이어지는지','보석빛 색과 신비로운 대기','마법의 원천에서 번지는 발광','세계의 규모를 보여주는 깊은 구도'),
+        dreamscape:visualStyle('드림스케이프','꿈속 풍경처럼 몽환적이고 감성적인 스타일입니다.',['몽환','안개','감성'],['#34466d','#8a73a1','#d59aab','#e9d9bd'],'dream','떠 있는 빛, 안개, 흐릿한 경계가 만드는 꿈의 감각','안개 속에서 녹아드는 파스텔빛','부유하는 듯한 확산광','현실과 기억이 겹치는 공간'),
+        cinematic:visualStyle('시네마틱 페인팅','영화 장면처럼 분위기와 조명이 강조되는 화풍입니다.',['영화적','조명','서사'],['#162632','#35505d','#a65d43','#e1b777'],'real','주인공을 이끄는 조명과 앞·중간·뒤 공간의 깊이','회화적 표면 위에 영화적인 색보정','강한 키라이트와 깊은 그림자','와이드 화면의 서사적 구도'),
+        photorealism:visualStyle('포토리얼리즘','사진처럼 매우 사실적으로 표현하는 스타일입니다.',['사진 같은','세밀함','현실감'],['#2e3e45','#718b91','#b99e7d','#e7ded1'],'real','빛의 반사, 피부, 재료가 사진처럼 설득력 있는지','매끄럽고 정밀한 현실 재현','카메라로 포착한 듯한 자연광','렌즈 시점과 실제적인 공간감'),
+        hyperrealism:visualStyle('하이퍼리얼리즘','사진보다 더 극도로 정교하고 섬세하게 사실을 표현하는 스타일입니다.',['극도의 정교함','미세 질감','강렬함'],['#1d2930','#506f79','#b78369','#f0dfc7'],'real','눈동자, 직물, 물방울 같은 미세한 질감','확대해도 살아 있는 초정밀 표면','세부를 또렷하게 드러내는 빛','강한 클로즈업과 선명한 초점'),
+        painterly:visualStyle('페인터리 스타일','붓질의 느낌과 회화적 감성을 강조하는 화풍입니다.',['붓질','회화적','감성'],['#263943','#7b5150','#c18156','#dfc99e'],'brush','완성된 형태 속에도 살아 있는 붓의 방향','보이는 붓 자국과 풍부한 혼색','붓질을 드러내는 비스듬한 빛','큰 붓 흐름으로 시선을 유도'),
+        textured:visualStyle('텍스처드 페인팅','표면 질감과 재료감이 강하게 느껴지는 스타일입니다.',['두꺼운 질감','재료감','입체적'],['#31382f','#726048','#b27a4a','#d7bf92'],'texture','두껍게 올라온 물감과 긁힌 표면의 입체감','거칠고 층이 많은 물질적 표면','돌출된 질감 위로 스치는 측면광','질감 덩어리로 만드는 대담한 구도')
       };
       const soundData = {
         restrained:{name:'절제된 로맨스',suno:'Instrumental cinematic chamber music for a Regency-era romantic drama. Intimate pianoforte, warm strings and gentle clarinet. Restrained longing, elegant 6/8 pulse, gradual emotional rise, no modern percussion. Begin with quiet distance, bloom during the rain confession, end with a tender resolved theme. Duration 2:30.',flow:'Create a 2 minute 30 second instrumental Regency-inspired cinematic chamber track. Use intimate pianoforte, warm strings and gentle clarinet. Keep an elegant 6/8 pulse and restrained romantic tension. Structure: quiet distant opening, subtle development, emotional bloom at the rain confession, tender resolved finale. No modern percussion or vocals.'},
@@ -627,10 +677,11 @@
       function storyProfile(story){
         const title=(story||'새로운 이야기').trim()||'새로운 이야기';
         const key=normalizeStory(title);
-        if(key.includes('오만과편견')||key.includes('prideandprejudice')) return {costume:'1790년대 말~1810년대 초 영국 복식',location:'영국 시골 저택·정원·무도회장',musicContext:'a late-Georgian English romantic drama based on Pride and Prejudice',instruments:'Intimate pianoforte, warm strings and gentle clarinet',guardrails:'Use historically inspired chamber colors with no modern percussion or vocals'};
-        if(key.includes('오디세이아')||key.includes('오디세우스')||key.includes('odyssey')||key.includes('odysseus')) return {costume:'청동기 그리스식 튜닉·망토·청동 갑옷',location:'에게해·낯선 섬·동굴·이타카 궁전',musicContext:'a mythic Bronze Age Greek sea voyage based on The Odyssey',instruments:'Ancient lyre, breathy aulos, frame drum, deep strings and sea-like vocal textures without lyrics',guardrails:'Keep the sound archaic, windswept and cinematic; avoid modern pop drums'};
-        if(key.includes('일리아스')||key.includes('일리야드')||key.includes('iliad')) return {costume:'청동기 전사의 갑옷·튜닉·붉은 망토',location:'트로이 성벽·그리스 함선·넓은 전장',musicContext:'a tragic Bronze Age Greek war epic based on The Iliad',instruments:'Ancient lyre, low frame drums, bronze-like horns and grave strings',guardrails:'Keep the sound heroic but mournful; avoid modern electronic textures and pop drums'};
-        return {costume:'《'+title+'》의 시대와 세계관에 맞는 의상',location:'《'+title+'》의 핵심 장소와 상징적 공간',musicContext:'the world and emotional arc of "'+title+'"',instruments:'A coherent cinematic ensemble chosen for the period, setting and emotional tone of the story',guardrails:'Keep every instrument and rhythm consistent with the selected story world; no distracting modern clichés'};
+        if(key.includes('오만과편견')||key.includes('prideandprejudice')) return {costume:'1790년대 말~1810년대 초 영국 복식',location:'영국 시골 저택·정원·무도회장',sceneHighlights:'비 속의 청혼 · 편지 · 펨벌리 · 새벽의 재회',musicContext:'a late-Georgian English romantic drama based on Pride and Prejudice',instruments:'Intimate pianoforte, warm strings and gentle clarinet',guardrails:'Use historically inspired chamber colors with no modern percussion or vocals'};
+        if(key.includes('오디세이아')||key.includes('오디세우스')||key.includes('odyssey')||key.includes('odysseus')) return {costume:'청동기 그리스식 튜닉·망토·청동 갑옷',location:'에게해·낯선 섬·동굴·이타카 궁전',sceneHighlights:'포세이돈의 폭풍 · 키클롭스 · 세이렌 · 이타카 귀환',musicContext:'a mythic Bronze Age Greek sea voyage based on The Odyssey',instruments:'Ancient lyre, breathy aulos, frame drum, deep strings and sea-like vocal textures without lyrics',guardrails:'Keep the sound archaic, windswept and cinematic; avoid modern pop drums'};
+        if(key.includes('일리아스')||key.includes('일리야드')||key.includes('iliad')) return {costume:'청동기 전사의 갑옷·튜닉·붉은 망토',location:'트로이 성벽·그리스 함선·넓은 전장',sceneHighlights:'헥토르의 작별 · 파트로클로스 · 결투 · 프리아모스',musicContext:'a tragic Bronze Age Greek war epic based on The Iliad',instruments:'Ancient lyre, low frame drums, bronze-like horns and grave strings',guardrails:'Keep the sound heroic but mournful; avoid modern electronic textures and pop drums'};
+        if(key.includes('신데렐라')||key.includes('cinderella')||key.includes('cendrillon')) return {costume:'17~18세기 유럽 동화풍 드레스·유리 구두·무도회 예복',location:'재투성이 부엌·마법의 정원·달빛 궁전·대리석 계단',sceneHighlights:'요정 대모 · 호박 마차 · 첫 춤 · 자정 · 유리 구두',musicContext:'a luminous European fairy-tale transformation based on Cinderella',instruments:'Celesta, harp, delicate strings, woodwinds and a warm waltz pulse',guardrails:'Keep the sound magical, elegant and storybook-like; avoid modern pop drums and synthetic club textures'};
+        return {costume:'《'+title+'》의 시대와 세계관에 맞는 의상',location:'《'+title+'》의 핵심 장소와 상징적 공간',sceneHighlights:'첫 만남 · 결정적 선택 · 위기 · 변화된 귀환',musicContext:'the world and emotional arc of "'+title+'"',instruments:'A coherent cinematic ensemble chosen for the period, setting and emotional tone of the story',guardrails:'Keep every instrument and rhythm consistent with the selected story world; no distracting modern clichés'};
       }
       function durationInEnglish(){return {'2분':'2 minutes','2분 30초':'2 minutes 30 seconds','3분':'3 minutes'}[state.duration]||state.duration;}
       function buildMusicPrompt(service){
@@ -709,6 +760,29 @@
         ['02:23–02:30 · 피날레','헥토르의 장례','새벽의 트로이가 침묵 속에서 헥토르를 떠나보냅니다.','funeral of Hector at dawn as Troy mourns beneath pale smoke']
       ];
 
+      const cinderellaScenes = [
+        ['00:00–00:08 · 도입','재투성이 부엌','새벽빛이 스미는 부엌에서 신데렐라가 홀로 잿가루를 쓸며 하루를 시작합니다.','Cinderella sweeping ashes in a vast old kitchen at pale dawn, worn dress, quiet dignity'],
+        ['00:08–00:15 · 인물','새들의 친구','신데렐라가 창가의 새들에게 빵 부스러기를 나누며 다정한 마음을 보여줍니다.','Cinderella sharing crumbs with small birds beside a kitchen window'],
+        ['00:15–00:22 · 갈등','두 언니의 명령','화려하게 차려입은 새언니들이 계단 위에서 끝없는 심부름을 쏟아냅니다.','two richly dressed stepsisters ordering Cinderella from the grand staircase'],
+        ['00:22–00:30 · 전환','왕궁의 초대장','왕자의 무도회 초대장이 도착하고 저택 전체가 들썩이기 시작합니다.','royal ball invitation opened on a table, household erupting with excitement'],
+        ['00:30–00:37 · 희망','어머니의 낡은 드레스','신데렐라가 어머니의 드레스를 손질하며 처음으로 무도회를 꿈꿉니다.','Cinderella carefully mending her late mother old gown by warm candlelight'],
+        ['00:37–00:45 · 추락','찢겨진 드레스','질투한 새언니들이 드레스를 찢고 떠나자 희망이 한순간에 무너집니다.','stepsisters tearing Cinderella handmade gown before departing for the palace'],
+        ['00:45–00:52 · 마법','정원에 내린 별빛','눈물 어린 정원에 요정 대모가 부드러운 빛과 함께 모습을 드러냅니다.','fairy godmother appearing in a moonlit garden around grieving Cinderella'],
+        ['00:52–01:00 · 변신','호박 마차','호박과 생쥐가 황금 마차와 말로 변하며 정원이 찬란한 마법으로 가득 찹니다.','pumpkin transforming into a golden carriage, mice becoming white horses, sparkling magic'],
+        ['01:00–01:07 · 변신','유리 구두','누더기 옷이 은빛 드레스로 변하고 발끝에 투명한 유리 구두가 빛납니다.','Cinderella transformed into a luminous silver-blue gown and crystal glass slippers'],
+        ['01:07–01:15 · 출발','달빛 아래의 질주','마차가 달빛 어린 숲길을 달리며 멀리 빛나는 궁전으로 향합니다.','golden carriage racing through a moonlit forest toward an illuminated palace'],
+        ['01:15–01:23 · 만남','멈춘 무도회','신데렐라가 무도회장에 들어서자 사람들의 움직임이 멈추고 왕자가 그녀를 바라봅니다.','Cinderella entering a grand candlelit ballroom as the prince notices her'],
+        ['01:23–01:30 · 설렘','첫 번째 춤','두 사람이 샹들리에 아래에서 춤추며 주변의 군중이 흐릿하게 멀어집니다.','Cinderella and the prince dancing beneath chandeliers, ballroom fading around them'],
+        ['01:30–01:38 · 절정','자정을 알리는 시계','거대한 궁전 시계가 자정을 알리기 직전, 신데렐라의 표정이 굳어집니다.','palace clock nearing midnight above Cinderella sudden alarmed expression'],
+        ['01:38–01:45 · 도주','계단 위의 유리 구두','신데렐라가 계단을 달려 내려가며 유리 구두 한 짝을 남깁니다.','Cinderella fleeing down marble palace steps, one glass slipper left behind'],
+        ['01:45–01:53 · 귀환','다시 재투성이','마법이 풀린 뒤 신데렐라가 낡은 옷차림으로 새벽 부엌에 돌아옵니다.','Cinderella back in worn clothes by the cold kitchen hearth before dawn'],
+        ['01:53–02:00 · 탐색','왕국을 도는 구두','왕자의 사절들이 붉은 방석 위 유리 구두를 들고 마을마다 찾아갑니다.','royal heralds carrying the glass slipper through villages on a velvet cushion'],
+        ['02:00–02:08 · 위기','잠긴 다락방','계모가 신데렐라를 다락방에 가두고 아래층에서는 구두 시험이 시작됩니다.','Cinderella locked in a shadowy attic while the slipper fitting begins below'],
+        ['02:08–02:15 · 도움','새들이 가져온 열쇠','작은 새들이 창문으로 날아와 반짝이는 열쇠를 신데렐라에게 건넵니다.','small birds delivering a shining attic key to Cinderella through the window'],
+        ['02:15–02:23 · 해소','맞아 들어간 유리 구두','신데렐라의 발에 유리 구두가 완벽하게 맞으며 모두가 놀라 조용해집니다.','glass slipper fitting Cinderella perfectly as the household watches in astonishment'],
+        ['02:23–02:30 · 피날레','새벽의 궁전','신데렐라와 왕자가 새벽빛 속 궁전 발코니에 나란히 서며 이야기가 끝납니다.','Cinderella and the prince together on a palace balcony at luminous sunrise']
+      ];
+
       const genericBeats = [
         ['도입','세계의 첫 풍경','《{story}》의 시대와 장소를 넓은 풍경으로 소개합니다.','opening landscape that establishes the world of {story}'],
         ['도입','주인공의 첫 모습','주인공의 일상과 성격을 한눈에 보여주는 장면입니다.','first portrait of the protagonist of {story} in their everyday world'],
@@ -746,6 +820,7 @@
         if(key.includes('오만과편견')||key.includes('prideandprejudice')) return cloneScenes(prideScenes);
         if(key.includes('오디세이아')||key.includes('오디세우스')||key.includes('odyssey')||key.includes('odysseus')) return cloneScenes(odysseyScenes);
         if(key.includes('일리아스')||key.includes('일리야드')||key.includes('iliad')) return cloneScenes(iliadScenes);
+        if(key.includes('신데렐라')||key.includes('cinderella')||key.includes('cendrillon')) return cloneScenes(cinderellaScenes);
         return buildGenericScenes(story);
       }
       function storyContext(story){
@@ -753,13 +828,61 @@
         if(key.includes('오만과편견')||key.includes('prideandprejudice')) return 'historically plausible late-Georgian English details';
         if(key.includes('오디세이아')||key.includes('오디세우스')||key.includes('odyssey')||key.includes('odysseus')) return 'mythic Bronze Age Greek world, ancient ships, islands and palaces';
         if(key.includes('일리아스')||key.includes('일리야드')||key.includes('iliad')) return 'mythic Bronze Age Troy, bronze armor, linen, timber ships and fortified walls';
+        if(key.includes('신데렐라')||key.includes('cinderella')||key.includes('cendrillon')) return 'timeless 17th-to-18th-century European fairy-tale world, candlelit manor, enchanted garden and luminous palace';
         return 'world and period details appropriate to '+((story||'the selected story').trim()||'the selected story');
       }
       let scenes=buildScenes(state.story);
 
       function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(function(){toast.classList.remove('show');},1800);}
+      function saveState(){
+        const label=document.getElementById('save-state-text');
+        try {
+          localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+          if(label) label.textContent='이 기기에 저장됨';
+          return true;
+        } catch(error){
+          if(label) label.textContent='저장할 수 없음';
+          return false;
+        }
+      }
+      function recommendedStyleKeys(story){
+        const key=normalizeStory(story);
+        if(key.includes('오만과편견')||key.includes('prideandprejudice')) return ['oil','romanticism','watercolor','pastel','vintageIllustration'];
+        if(key.includes('신데렐라')||key.includes('cinderella')||key.includes('cendrillon')) return ['fantasy','artNouveau','watercolor','dreamscape','cinematic'];
+        if(key.includes('오디세이아')||key.includes('오디세우스')||key.includes('odyssey')||key.includes('odysseus')) return ['romanticism','oil','fantasy','cinematic','textured'];
+        if(key.includes('일리아스')||key.includes('일리야드')||key.includes('iliad')) return ['romanticism','expressionism','oil','cinematic','textured'];
+        return ['cinematic','digital','painterly','watercolor','fantasy'];
+      }
+      function renderStyleCards(){
+        const grid=document.getElementById('style-grid');
+        const recommended=recommendedStyleKeys(state.story);
+        const ordered=recommended.concat(STYLE_KEYS.filter(function(key){return !recommended.includes(key);}));
+        const recommendedNames=recommended.slice(0,3).map(function(key){return styleData[key].name;});
+        const recommendationLabel=state.story?'《'+state.story+'》 추천':'새 프로젝트 추천';
+        document.getElementById('style-recommendation-title').textContent=recommendationLabel+': '+recommendedNames.join(' · ');
+        grid.innerHTML=ordered.map(function(key){
+          const d=styleData[key];
+          const rank=recommended.indexOf(key);
+          const colors=d.palette.map(function(color,index){return '--c'+(index+1)+':'+color;}).join(';');
+          const badge=rank>-1?'<span class="recommendation-badge">추천 '+(rank+1)+'</span>':'';
+          const tags=d.tags.map(function(tag){return '<span class="tag">'+tag+'</span>';}).join('');
+          return '<button class="style-card" type="button" aria-pressed="'+String(key===state.style)+'" data-style="'+key+'" style="'+colors+'">'+
+            '<span class="style-preview" data-texture="'+d.texture+'" aria-hidden="true"><span class="preview-caption">색·질감 예시</span>'+badge+'</span>'+
+            '<span class="style-card-copy"><span class="style-name">'+d.name+' <span class="choice-mark">✓</span></span><span class="style-desc">'+d.description+'</span><span class="tag-list">'+tags+'</span></span></button>';
+        }).join('');
+        grid.querySelectorAll('.style-card').forEach(function(btn){btn.addEventListener('click',function(){selectStyle(btn.dataset.style);saveState();});});
+      }
+      function syncControlsFromState(){
+        document.getElementById('story-input').value='';
+        document.querySelectorAll('#mood-chips .chip').forEach(function(el){el.setAttribute('aria-pressed',String(state.moods.includes(el.textContent)));});
+        document.querySelectorAll('#duration-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.duration===state.duration));});
+        document.querySelectorAll('.style-card').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.style===state.style));});
+        document.querySelectorAll('.sound-route').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.sound===state.sound));});
+        document.querySelectorAll('#service-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.service===state.service));});
+        document.getElementById('save-state-text').textContent=savedState?'이 기기에 저장됨':'이 기기에 자동 저장';
+      }
       function updateSummary(){
-        document.getElementById('project-name').textContent=state.story||'새로운 이야기';
+        document.getElementById('project-name').textContent=state.story||'프로젝트(작품명)을 입력하세요';
         document.getElementById('project-summary').textContent=(state.moods.join('과 ')||'선택한 분위기')+'을 담은 회화적 뮤직비디오';
         document.getElementById('summary-duration').textContent=state.duration;
         document.getElementById('summary-style').textContent=styleData[state.style].name;
@@ -768,6 +891,7 @@
         const profile=storyProfile(state.story);
         document.getElementById('rule-costume').textContent=profile.costume;
         document.getElementById('rule-location').textContent=profile.location;
+        document.getElementById('style-scenes').textContent=profile.sceneHighlights;
       }
       function selectStyle(style){
         if(!styleData[style]) return;
@@ -777,13 +901,15 @@
         document.getElementById('style-detail-name').textContent=d.name;
         document.getElementById('style-detail-description').textContent=d.description;
         document.getElementById('style-watch').textContent=d.watch;
-        document.getElementById('style-scenes').textContent=d.scenes;
+        document.getElementById('style-scenes').textContent=storyProfile(state.story).sceneHighlights;
         document.getElementById('palette-title').textContent=d.name+' 팔레트';
         document.getElementById('palette-note').textContent=d.note;
         document.getElementById('swatches').innerHTML=d.palette.map(function(c){return '<span class="swatch" style="background:'+c+'"></span>';}).join('');
         document.getElementById('rule-light').textContent=d.light;
         document.getElementById('rule-composition').textContent=d.composition;
+        document.getElementById('style-search-input').value=d.name+' 화풍 대표 그림';
         updateSummary();
+        if(scenes&&scenes[state.scene]) selectScene(state.scene);
       }
       function updateMusic(){
         const d=soundData[state.sound];
@@ -795,13 +921,13 @@
       function renderScenes(){
         const strip=document.getElementById('scene-strip');
         strip.innerHTML=scenes.map(function(_,i){return '<button class="scene-dot" type="button" aria-pressed="'+String(i===state.scene)+'" data-scene="'+i+'" aria-label="'+(i+1)+'번 장면">'+String(i+1).padStart(2,'0')+'</button>';}).join('');
-        strip.querySelectorAll('button').forEach(function(btn){btn.addEventListener('click',function(){selectScene(Number(btn.dataset.scene));});});
+        strip.querySelectorAll('button').forEach(function(btn){btn.addEventListener('click',function(){selectScene(Number(btn.dataset.scene));saveState();});});
         selectScene(state.scene);
       }
-      function refreshStoryboard(){
+      function refreshStoryboard(resetScene){
         scenes=buildScenes(state.story);
-        state.scene=0;
-        document.getElementById('storyboard-title').textContent='《'+((state.story||'새로운 이야기').trim()||'새로운 이야기')+'》의 20장 스토리보드';
+        if(resetScene!==false||!scenes[state.scene]) state.scene=0;
+        document.getElementById('storyboard-title').textContent=state.story?'《'+state.story.trim()+'》의 20장 스토리보드':'프로젝트(작품명)을 입력하세요';
         renderScenes();
       }
       function makeScenePrompt(scene){
@@ -824,13 +950,17 @@
         const input=document.getElementById('story-input');
         const button=document.getElementById('apply-story');
         const help=document.getElementById('story-apply-help');
+        const alert=document.getElementById('storyboard-apply-alert');
+        const alertTitle=document.getElementById('storyboard-pending-title');
         const title=input.value.trim();
         button.disabled=!title;
         help.classList.remove('pending','applied');
-        if(!title){help.textContent='현재는 《'+state.story+'》 예시입니다. 작품명을 입력한 뒤 전체 적용하기를 눌러주세요.';return;}
-        if(title===state.story){help.textContent='《'+state.story+'》 작품을 20장 전체에 적용했습니다.';help.classList.add('applied');return;}
+        if(!title){alert.hidden=true;help.textContent=state.story?'현재는 《'+state.story+'》 프로젝트입니다. 새 작품명을 입력하면 전체에 바꿀 수 있습니다.':'작품명을 입력한 뒤 전체 적용하기를 눌러주세요.';return;}
+        if(title===state.story){alert.hidden=true;help.textContent='《'+state.story+'》 작품을 20장 전체에 적용했습니다.';help.classList.add('applied');return;}
         help.textContent='아직 적용 전입니다. 전체 적용하기를 누르면 20장 프롬프트가 모두 바뀝니다.';
         help.classList.add('pending');
+        alertTitle.textContent='입력한 《'+title+'》 작품이 아직 적용되지 않았습니다.';
+        alert.hidden=false;
       }
       function applyStory(options){
         const settings=options||{};
@@ -839,11 +969,13 @@
         if(!title){updateStoryApplyState();input.focus();return false;}
         state.story=title;
         input.value=title;
+        renderStyleCards();
         updateSummary();
         updateStoryRules();
         updateMusic();
         refreshStoryboard();
         updateStoryApplyState();
+        saveState();
         if(settings.toast!==false) showToast('《'+title+'》 작품을 20장 전체에 적용했습니다.');
         return true;
       }
@@ -852,13 +984,12 @@
       document.getElementById('story-input').addEventListener('input',updateStoryApplyState);
       document.getElementById('story-input').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();applyStory();}});
       document.getElementById('apply-story').addEventListener('click',function(){applyStory();});
-      document.querySelectorAll('#mood-chips .chip').forEach(function(btn){btn.addEventListener('click',function(){const on=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',String(on));state.moods=Array.from(document.querySelectorAll('#mood-chips .chip[aria-pressed="true"]')).map(function(el){return el.textContent;});updateSummary();});});
-      document.querySelectorAll('#duration-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.duration=btn.dataset.duration;document.querySelectorAll('#duration-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateSummary();});});
+      document.getElementById('apply-storyboard').addEventListener('click',function(){applyStory();});
+      document.querySelectorAll('#mood-chips .chip').forEach(function(btn){btn.addEventListener('click',function(){const on=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',String(on));state.moods=Array.from(document.querySelectorAll('#mood-chips .chip[aria-pressed="true"]')).map(function(el){return el.textContent;});updateSummary();saveState();});});
+      document.querySelectorAll('#duration-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.duration=btn.dataset.duration;document.querySelectorAll('#duration-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateSummary();updateMusic();saveState();});});
       document.getElementById('to-styles').addEventListener('click',function(){document.getElementById('styles').scrollIntoView({behavior:'smooth'});});
-      document.querySelectorAll('.style-card').forEach(function(btn){btn.addEventListener('click',function(){selectStyle(btn.dataset.style);selectScene(state.scene);});});
-      document.querySelectorAll('.tab').forEach(function(tab){tab.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(function(el){el.setAttribute('aria-selected',String(el===tab));});['same','features','references'].forEach(function(view){document.getElementById('view-'+view).hidden=view!==tab.dataset.view;});});});
-      document.querySelectorAll('.sound-route').forEach(function(btn){btn.addEventListener('click',function(){state.sound=btn.dataset.sound;document.querySelectorAll('.sound-route').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateMusic();});});
-      document.querySelectorAll('#service-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.service=btn.dataset.service;document.querySelectorAll('#service-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateMusic();});});
+      document.querySelectorAll('.sound-route').forEach(function(btn){btn.addEventListener('click',function(){state.sound=btn.dataset.sound;document.querySelectorAll('.sound-route').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateMusic();saveState();});});
+      document.querySelectorAll('#service-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.service=btn.dataset.service;document.querySelectorAll('#service-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateMusic();saveState();});});
       document.getElementById('copy-music').addEventListener('click',function(){navigator.clipboard.writeText(document.getElementById('music-prompt').textContent).then(function(){showToast('음악 제작문을 복사했습니다.');});});
       document.getElementById('copy-plan').addEventListener('click',function(){navigator.clipboard.writeText(JSON.stringify(planObject(),null,2)).then(function(){showToast('전체 기획안을 복사했습니다.');});});
       document.getElementById('download-plan').addEventListener('click',function(){const blob=new Blob([JSON.stringify(planObject(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='scene-palette-plan.json';a.click();URL.revokeObjectURL(url);showToast('제작안을 내려받았습니다.');});
@@ -866,15 +997,18 @@
       if(document.modelContext&&document.modelContext.registerTool){
         const controller=new AbortController();
         Promise.resolve(document.modelContext.registerTool({name:'configure_project',title:'프로젝트 설정',description:'이야기 제목, 길이와 원하는 감정을 설정하고 보이는 프로젝트 요약, 음악 제작문과 20장 스토리보드를 전체 적용합니다.',inputSchema:{type:'object',properties:{story:{type:'string'},duration:{type:'string',enum:['2분','2분 30초','3분']},moods:{type:'array',items:{type:'string'},maxItems:5}},required:['story'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||typeof input.story!=='string'||!input.story.trim())throw new Error('이야기 제목이 필요합니다.');if(input.duration)state.duration=input.duration;if(Array.isArray(input.moods))state.moods=input.moods.slice(0,5);document.getElementById('story-input').value=input.story.trim();applyStory({toast:false});return {story:state.story,duration:state.duration,moods:state.moods,storyboardTitle:document.getElementById('storyboard-title').textContent,sceneCount:scenes.length};}},{signal:controller.signal})).catch(function(){});
-        Promise.resolve(document.modelContext.registerTool({name:'select_visual_style',title:'그림 스타일 선택',description:'프로젝트의 그림 스타일을 선택하고 비주얼 바이블을 갱신합니다.',inputSchema:{type:'object',properties:{style:{type:'string',enum:['oil','watercolor','engraving']}},required:['style'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||!styleData[input.style])throw new Error('지원하지 않는 스타일입니다.');selectStyle(input.style);return {style:input.style,name:styleData[input.style].name};}},{signal:controller.signal})).catch(function(){});
-        Promise.resolve(document.modelContext.registerTool({name:'select_music_output',title:'음악 출력 선택',description:'음악 방향과 제작 도구를 선택해 보이는 제작문을 갱신합니다.',inputSchema:{type:'object',properties:{direction:{type:'string',enum:['restrained','playful','crescendo']},service:{type:'string',enum:['suno','flow','both']}},required:['direction','service'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||!soundData[input.direction]||!['suno','flow','both'].includes(input.service))throw new Error('지원하지 않는 음악 설정입니다.');state.sound=input.direction;state.service=input.service;updateMusic();return {direction:soundData[state.sound].name,service:state.service};}},{signal:controller.signal})).catch(function(){});
+        Promise.resolve(document.modelContext.registerTool({name:'select_visual_style',title:'그림 스타일 선택',description:'프로젝트의 그림 스타일을 선택하고 비주얼 바이블을 갱신합니다.',inputSchema:{type:'object',properties:{style:{type:'string',enum:STYLE_KEYS.slice()}},required:['style'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||!styleData[input.style])throw new Error('지원하지 않는 스타일입니다.');selectStyle(input.style);saveState();return {style:input.style,name:styleData[input.style].name};}},{signal:controller.signal})).catch(function(){});
+        Promise.resolve(document.modelContext.registerTool({name:'select_music_output',title:'음악 출력 선택',description:'음악 방향과 제작 도구를 선택해 보이는 제작문을 갱신합니다.',inputSchema:{type:'object',properties:{direction:{type:'string',enum:['restrained','playful','crescendo']},service:{type:'string',enum:['suno','flow','both']}},required:['direction','service'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||!soundData[input.direction]||!['suno','flow','both'].includes(input.service))throw new Error('지원하지 않는 음악 설정입니다.');state.sound=input.direction;state.service=input.service;updateMusic();saveState();return {direction:soundData[state.sound].name,service:state.service};}},{signal:controller.signal})).catch(function(){});
         Promise.resolve(document.modelContext.registerTool({name:'read_project_plan',title:'제작안 읽기',description:'현재 선택된 시각 스타일, 음악 방향과 스토리보드를 읽습니다.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute:function(){return planObject();}},{signal:controller.signal})).catch(function(){});
       }
 
+      syncControlsFromState();
+      renderStyleCards();
       updateSummary();
       updateStoryRules();
+      selectStyle(state.style);
       updateMusic();
-      refreshStoryboard();
+      refreshStoryboard(false);
       updateStoryApplyState();
     })();
   </script>

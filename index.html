@@ -4,7 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>씬 팔레트 — 이야기의 미술감독</title>
-  <meta name="description" content="미술과 음악 용어를 몰라도 이야기에서 일관된 뮤직비디오 제작안을 만드는 시각 연출 도구">
+  <meta name="description" content="좋아하는 이야기를 그림 스타일, 음악 프롬프트와 20장 스토리보드로 완성하는 초보 크리에이터용 미술감독 도구">
+  <meta name="theme-color" content="#83382f">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="씬 팔레트">
+  <meta property="og:title" content="씬 팔레트 — 이야기를 하나의 작품으로">
+  <meta property="og:description" content="미술과 음악을 몰라도 괜찮아요. 좋아하는 이야기를 화풍, 음악 프롬프트와 20장 스토리보드로 설계해 보세요.">
+  <meta property="og:url" content="https://scene-palette.vercel.app/">
+  <meta property="og:image" content="https://scene-palette.vercel.app/og.jpg">
+  <meta property="og:image:secure_url" content="https://scene-palette.vercel.app/og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="628">
+  <meta property="og:image:alt" content="책 속에서 유화, 수채화, 고전 판화와 음악, 스토리보드가 펼쳐지는 씬 팔레트">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="씬 팔레트 — 이야기를 하나의 작품으로">
+  <meta name="twitter:description" content="좋아하는 이야기를 그림 스타일, 음악 프롬프트와 20장 스토리보드로 완성하세요.">
+  <meta name="twitter:image" content="https://scene-palette.vercel.app/og.jpg">
+  <meta name="twitter:image:alt" content="씬 팔레트 오픈그래프 이미지">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238d3c32'/%3E%3Cpath d='M18 43V21h13c8 0 15 4 15 11s-7 11-15 11H18zm8-7h6c4 0 7-1 7-4s-3-4-7-4h-6v8z' fill='%23f7efe1'/%3E%3C/svg%3E">
   <style>
     :root {
@@ -390,6 +408,9 @@
     .export-bar h2 { margin:0 0 3px; font-size:1.35rem; }
     .export-bar p { margin:0; color:#c9c0b4; font-size:.9rem; }
     .export-actions { display:flex; gap:9px; flex:0 0 auto; }
+    .pdf-action { color:#261d18; background:#f0d59d; border-color:#f0d59d; }
+    .pdf-action:hover { background:#f6dfaf; border-color:#f6dfaf; }
+    .pdf-action:disabled { color:#6b6258; background:#cfc2aa; border-color:#cfc2aa; }
 
     .toast {
       position:fixed;
@@ -621,7 +642,7 @@
 
     <section class="export-bar" aria-labelledby="export-title">
       <div><h2 id="export-title">첫 번째 작품 세계가 준비됐어요</h2><p>선택한 시각 규칙, 음악 방향, 스토리보드를 하나의 제작안으로 가져가세요.</p></div>
-      <div class="export-actions"><button class="secondary-action" type="button" id="copy-plan" style="color:#f7efe2;border-color:#756f66">기획안 복사</button><button class="primary-action" type="button" id="download-plan">제작안 내려받기</button></div>
+      <div class="export-actions"><button class="secondary-action" type="button" id="copy-plan" style="color:#f7efe2;border-color:#756f66">기획안 복사</button><button class="primary-action" type="button" id="download-plan">제작안 내려받기</button><button class="primary-action pdf-action" type="button" id="download-pdf" aria-label="음악 프롬프트와 20개 이미지 프롬프트를 PDF로 다운로드">PDF 다운로드</button></div>
     </section>
   </main>
 
@@ -971,6 +992,200 @@
       }
       function planObject(){return {project:state.story,duration:state.duration,moods:state.moods,storyWorld:storyProfile(state.story),visualStyle:styleData[state.style].name,visualBible:styleData[state.style],soundDirection:soundData[state.sound].name,musicService:state.service,musicPrompt:document.getElementById('music-prompt').textContent,storyboard:scenes.map(function(s,i){return {scene:i+1,time:s[0],title:s[1],description:s[2],prompt:makeScenePrompt(s)};})};}
 
+      function textBytes(value){return new TextEncoder().encode(value);}
+      function concatBytes(parts){
+        const size=parts.reduce(function(total,part){return total+part.length;},0);
+        const output=new Uint8Array(size);
+        let offset=0;
+        parts.forEach(function(part){output.set(part,offset);offset+=part.length;});
+        return output;
+      }
+      function jpegBytesFromCanvas(canvas){
+        const base64=canvas.toDataURL('image/jpeg',.88).split(',')[1];
+        const binary=atob(base64);
+        const bytes=new Uint8Array(binary.length);
+        for(let i=0;i<binary.length;i+=1) bytes[i]=binary.charCodeAt(i);
+        return bytes;
+      }
+      function buildImagePdf(images,width,height){
+        const pageWidth='595.28';
+        const pageHeight='841.89';
+        const chunks=[];
+        const offsets=[0];
+        let length=0;
+        function append(part){const bytes=typeof part==='string'?textBytes(part):part;chunks.push(bytes);length+=bytes.length;}
+        function addObject(number,parts){offsets[number]=length;append(number+' 0 obj\n');parts.forEach(append);append('\nendobj\n');}
+        append(concatBytes([textBytes('%PDF-1.4\n%'),new Uint8Array([226,227,207,211]),textBytes('\n')]));
+        addObject(1,['<< /Type /Catalog /Pages 2 0 R >>']);
+        const pageNumbers=images.map(function(_,index){return 3+(index*3);});
+        addObject(2,['<< /Type /Pages /Kids ['+pageNumbers.map(function(number){return number+' 0 R';}).join(' ')+'] /Count '+images.length+' >>']);
+        images.forEach(function(image,index){
+          const pageNumber=3+(index*3);
+          const imageNumber=pageNumber+1;
+          const contentNumber=pageNumber+2;
+          const content='q '+pageWidth+' 0 0 '+pageHeight+' 0 0 cm /Im0 Do Q';
+          addObject(pageNumber,['<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+pageWidth+' '+pageHeight+'] /Resources << /XObject << /Im0 '+imageNumber+' 0 R >> >> /Contents '+contentNumber+' 0 R >>']);
+          addObject(imageNumber,['<< /Type /XObject /Subtype /Image /Width '+width+' /Height '+height+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+image.length+' >>\nstream\n',image,'\nendstream']);
+          addObject(contentNumber,['<< /Length '+textBytes(content).length+' >>\nstream\n'+content+'\nendstream']);
+        });
+        const xrefOffset=length;
+        const objectCount=2+(images.length*3);
+        append('xref\n0 '+(objectCount+1)+'\n0000000000 65535 f \n');
+        for(let number=1;number<=objectCount;number+=1) append(String(offsets[number]).padStart(10,'0')+' 00000 n \n');
+        append('trailer\n<< /Size '+(objectCount+1)+' /Root 1 0 R >>\nstartxref\n'+xrefOffset+'\n%%EOF');
+        return concatBytes(chunks);
+      }
+      function wrapCanvasText(context,text,x,y,maxWidth,lineHeight,options){
+        const settings=options||{};
+        const maxLines=settings.maxLines||999;
+        const words=String(text||'').replace(/\r/g,'').split(/(\s+)/);
+        let line='';
+        let lines=0;
+        function drawLine(value){
+          if(lines>=maxLines) return;
+          context.fillText(value.trim(),x,y+(lines*lineHeight));
+          lines+=1;
+        }
+        words.forEach(function(word){
+          if(lines>=maxLines) return;
+          if(word.includes('\n')){
+            const pieces=word.split('\n');
+            pieces.forEach(function(piece,index){
+              if(piece) line+=piece;
+              if(index<pieces.length-1){drawLine(line);line='';}
+            });
+            return;
+          }
+          const trial=line+word;
+          if(context.measureText(trial).width<=maxWidth){line=trial;return;}
+          if(line.trim()) drawLine(line);
+          line=word.trimStart();
+          if(context.measureText(line).width>maxWidth){
+            let fragment='';
+            Array.from(line).forEach(function(character){
+              const next=fragment+character;
+              if(context.measureText(next).width>maxWidth&&fragment){drawLine(fragment);fragment=character;}else fragment=next;
+            });
+            line=fragment;
+          }
+        });
+        if(line.trim()&&lines<maxLines) drawLine(line);
+        return y+(lines*lineHeight);
+      }
+      function createPdfCanvas(){
+        const canvas=document.createElement('canvas');
+        canvas.width=1240;
+        canvas.height=1754;
+        const context=canvas.getContext('2d');
+        context.fillStyle='#fbf6ed';
+        context.fillRect(0,0,canvas.width,canvas.height);
+        return {canvas:canvas,context:context};
+      }
+      function drawPdfHeader(context,label,title,pageNumber,totalPages){
+        context.fillStyle='#843d34';
+        context.font='700 23px "Malgun Gothic",sans-serif';
+        context.fillText(label,82,80);
+        context.fillStyle='#231d19';
+        context.font='700 44px "Malgun Gothic",sans-serif';
+        wrapCanvasText(context,title,82,140,1076,57,{maxLines:2});
+        context.strokeStyle='#d7c7af';
+        context.lineWidth=2;
+        context.beginPath();context.moveTo(82,250);context.lineTo(1158,250);context.stroke();
+        context.fillStyle='#74685d';
+        context.font='400 19px "Malgun Gothic",sans-serif';
+        context.fillText('씬 팔레트 · '+pageNumber+' / '+totalPages,970,1690);
+      }
+      function drawPdfCover(plan,totalPages){
+        const page=createPdfCanvas();
+        const context=page.context;
+        const project=plan.project||'프로젝트(작품명)을 입력하세요';
+        drawPdfHeader(context,'MUSIC PROMPT','《'+project+'》 음악 프롬프트',1,totalPages);
+        context.fillStyle='#6f5f52';
+        context.font='400 23px "Malgun Gothic",sans-serif';
+        context.fillText(plan.duration+' · '+plan.visualStyle+' · '+plan.soundDirection,82,305);
+        context.fillStyle='#efe3d3';
+        context.beginPath();context.roundRect(82,355,1076,1160,24);context.fill();
+        context.fillStyle='#843d34';
+        context.font='700 25px "Malgun Gothic",sans-serif';
+        context.fillText('음악 제작 도구',124,420);
+        context.fillStyle='#231d19';
+        context.font='700 31px "Malgun Gothic",sans-serif';
+        const serviceLabel={suno:'Suno',flow:'Google Flow Music',both:'Suno + Google Flow Music'}[plan.musicService]||plan.musicService;
+        context.fillText(serviceLabel,124,468);
+        context.fillStyle='#843d34';
+        context.font='700 25px "Malgun Gothic",sans-serif';
+        context.fillText('프롬프트',124,550);
+        context.fillStyle='#29231e';
+        context.font='400 24px "Malgun Gothic",sans-serif';
+        wrapCanvasText(context,plan.musicPrompt,124,610,992,39,{maxLines:21});
+        return jpegBytesFromCanvas(page.canvas);
+      }
+      function drawPdfScenePage(plan,pair,pageNumber,totalPages){
+        const page=createPdfCanvas();
+        const context=page.context;
+        const project=plan.project||'새로운 이야기';
+        drawPdfHeader(context,'IMAGE PROMPTS','《'+project+'》 20장 이미지 프롬프트',pageNumber,totalPages);
+        pair.forEach(function(scene,index){
+          const top=300+(index*690);
+          context.fillStyle='#ffffff';
+          context.strokeStyle='#d7c7af';
+          context.lineWidth=2;
+          context.beginPath();context.roundRect(82,top,1076,620,22);context.fill();context.stroke();
+          context.fillStyle='#843d34';
+          context.font='700 24px "Malgun Gothic",sans-serif';
+          context.fillText(String(scene.scene).padStart(2,'0')+' · '+scene.time,120,top+58);
+          context.fillStyle='#231d19';
+          context.font='700 34px "Malgun Gothic",sans-serif';
+          wrapCanvasText(context,scene.title,120,top+112,1000,45,{maxLines:2});
+          context.fillStyle='#6f5f52';
+          context.font='400 22px "Malgun Gothic",sans-serif';
+          wrapCanvasText(context,scene.description,120,top+190,1000,34,{maxLines:3});
+          context.fillStyle='#843d34';
+          context.font='700 22px "Malgun Gothic",sans-serif';
+          context.fillText('이미지 제작문',120,top+315);
+          context.fillStyle='#29231e';
+          context.font='400 21px "Malgun Gothic",sans-serif';
+          wrapCanvasText(context,scene.prompt,120,top+360,1000,32,{maxLines:7});
+        });
+        return jpegBytesFromCanvas(page.canvas);
+      }
+      async function downloadPromptPdf(){
+        const button=document.getElementById('download-pdf');
+        const originalText=button.textContent;
+        button.disabled=true;
+        button.textContent='PDF 만드는 중…';
+        showToast('음악과 20개 프롬프트를 PDF로 만들고 있습니다.');
+        try {
+          if(document.fonts&&document.fonts.ready) await document.fonts.ready;
+          await new Promise(function(resolve){requestAnimationFrame(resolve);});
+          const plan=planObject();
+          const totalPages=1+Math.ceil(plan.storyboard.length/2);
+          const images=[drawPdfCover(plan,totalPages)];
+          for(let index=0;index<plan.storyboard.length;index+=2){
+            images.push(drawPdfScenePage(plan,plan.storyboard.slice(index,index+2),images.length+1,totalPages));
+            await new Promise(function(resolve){setTimeout(resolve,0);});
+          }
+          const pdf=buildImagePdf(images,1240,1754);
+          const blob=new Blob([pdf],{type:'application/pdf'});
+          const url=URL.createObjectURL(blob);
+          const link=document.createElement('a');
+          const safeName=(plan.project||'scene-palette').replace(/[\\/:*?"<>|]/g,'-').trim()||'scene-palette';
+          link.href=url;
+          link.download=safeName+'-music-and-image-prompts.pdf';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          setTimeout(function(){URL.revokeObjectURL(url);},1000);
+          showToast('PDF를 내려받았습니다.');
+        } catch(error){
+          console.error(error);
+          showToast('PDF를 만들지 못했습니다. 다시 시도해주세요.');
+        } finally {
+          button.disabled=false;
+          button.textContent=originalText;
+        }
+      }
+
       function updateStoryApplyState(){
         const input=document.getElementById('story-input');
         const button=document.getElementById('apply-story');
@@ -1018,6 +1233,7 @@
       document.getElementById('copy-music').addEventListener('click',function(){navigator.clipboard.writeText(document.getElementById('music-prompt').textContent).then(function(){showToast('음악 제작문을 복사했습니다.');});});
       document.getElementById('copy-plan').addEventListener('click',function(){navigator.clipboard.writeText(JSON.stringify(planObject(),null,2)).then(function(){showToast('전체 기획안을 복사했습니다.');});});
       document.getElementById('download-plan').addEventListener('click',function(){const blob=new Blob([JSON.stringify(planObject(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='scene-palette-plan.json';a.click();URL.revokeObjectURL(url);showToast('제작안을 내려받았습니다.');});
+      document.getElementById('download-pdf').addEventListener('click',downloadPromptPdf);
 
       if(document.modelContext&&document.modelContext.registerTool){
         const controller=new AbortController();

@@ -260,13 +260,14 @@
     .style-toggle-heading { display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:12px; }
     .style-toggle-heading h3 { margin:0; font-size:1.18rem; }
     .style-toggle-heading p { margin:0; color:var(--muted); font-size:.84rem; }
-    .style-toggle-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+    .style-toggle-list { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
     .style-toggle {
       display:flex;
-      align-items:center;
+      align-items:stretch;
+      flex-direction:column;
       justify-content:space-between;
       gap:14px;
-      min-height:78px;
+      min-height:138px;
       padding:13px 14px;
       text-align:left;
       background:#fffdf8;
@@ -280,7 +281,7 @@
     .style-toggle-copy { min-width:0; }
     .style-toggle-copy strong { display:block; font-size:.95rem; }
     .style-toggle-copy span { display:block; margin-top:3px; color:var(--muted); font-size:.8rem; line-height:1.4; }
-    .toggle-side { display:flex; flex:0 0 auto; align-items:center; gap:7px; }
+    .toggle-side { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:7px; width:100%; }
     .toggle-recommendation { padding:3px 7px; color:var(--wine-deep); background:#f6dfaa; border-radius:999px; font-size:.68rem; font-weight:800; }
     .toggle-state { min-width:46px; padding:5px 8px; color:var(--muted); background:var(--paper); border:1px solid var(--line); border-radius:999px; text-align:center; font-size:.72rem; font-weight:750; }
     .style-toggle[aria-pressed="true"] .toggle-state { color:#fff; background:var(--wine); border-color:var(--wine); }
@@ -436,7 +437,7 @@
       .workspace-heading,.project-grid,.bible-layout,.sound-layout,.scene-detail { grid-template-columns:1fr; }
       .brief-panel,.sound-controls { border-right:0; border-bottom:1px solid var(--line); }
       .style-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .style-toggle-list { grid-template-columns:1fr; }
+      .style-toggle-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .scene-strip { grid-template-columns:repeat(5,1fr); }
       .heading-note { display:none; }
       .section-head { align-items:flex-start; flex-direction:column; gap:6px; }
@@ -651,7 +652,7 @@
   <script>
     (function () {
       const FEATURED_STYLE_KEYS=['oil','watercolor','engraving'];
-      const STYLE_KEYS=FEATURED_STYLE_KEYS.concat(['impressionism','postImpressionism','realism','surrealism','expressionism','romanticism','modernArt','contemporary','abstract','minimal','digital','pastel','acrylic','gouache','inkWash','oriental','sumukhColor','artNouveau','artDeco','vintageIllustration','fantasy','dreamscape','cinematic','photorealism','hyperrealism','painterly','textured']);
+      const STYLE_KEYS=FEATURED_STYLE_KEYS.concat(['impressionism','postImpressionism','realism','surrealism','expressionism','romanticism','modernArt','contemporary','abstract','minimal','digital','japaneseAnime','pastel','acrylic','gouache','inkWash','oriental','sumukhColor','artNouveau','artDeco','vintageIllustration','fantasy','dreamscape','cinematic','photorealism','hyperrealism','painterly','textured']);
       const defaultState={story:'',moods:['절제된 설렘','우아함'],duration:'2분 30초',style:'oil',sound:'restrained',service:'suno',scene:0};
       const state=Object.assign({},defaultState,{moods:defaultState.moods.slice()});
       try { localStorage.removeItem('scene-palette-state-v3'); } catch(error) {}
@@ -671,6 +672,7 @@
         abstract:visualStyle('추상화','구체적 형태보다 색과 흐름, 감정을 중심으로 표현하는 화풍입니다.',['색의 흐름','감정','비구상'],['#27345d','#9c3d61','#df9c42','#ead7b8'],'dream','형태를 알아보지 않아도 감정이 전달되는 색과 리듬','겹치는 색면과 자유로운 흐름','색의 대비 자체가 만드는 빛','시선을 이끄는 선과 색의 리듬'),
         minimal:visualStyle('미니멀 아트','요소를 절제해 깔끔하고 세련되게 표현하는 스타일입니다.',['절제','여백','깔끔함'],['#282a2d','#a79d90','#d4cbbb','#f5f1e9'],'graphic','적은 요소가 서로 이루는 비례와 빈 공간','매끈한 면과 제한된 색','그림자가 적은 균일한 빛','하나의 초점과 넓은 여백'),
         digital:visualStyle('디지털 페인팅','회화 느낌을 디지털로 부드럽고 선명하게 구현하는 스타일입니다.',['선명함','부드러운 회화','디지털'],['#243653','#456f8e','#c26f65','#f0c58d'],'brush','깨끗한 가장자리와 회화적 질감이 만나는 지점','매끄러운 혼색과 제어된 붓결','영화처럼 정교하게 설계한 빛','읽기 쉬운 주인공 중심 구도'),
+        japaneseAnime:visualStyle('일본 애니메이션','또렷한 선과 섬세한 표정, 감성적인 색과 빛으로 이야기를 생동감 있게 표현하는 스타일입니다.',['또렷한 선','감성적 색감','표정 연출'],['#31466a','#78a8bd','#d98c86','#f4d8a6'],'graphic','눈빛과 표정, 바람에 움직이는 머리카락과 의상의 섬세한 변화','깨끗한 선과 부드러운 셀 채색, 감성적인 배경색','노을과 창가 빛처럼 분위기를 강조하는 부드러운 역광','인물의 감정을 선명하게 보여주는 영화적 화면 구성'),
         pastel:visualStyle('파스텔화','부드럽고 포근한 색감이 살아나는 화풍입니다.',['포근함','가루 질감','부드러운 색'],['#8499a3','#d4ada6','#e5cf9d','#f6eadf'],'wash','보송한 가장자리와 겹친 색의 부드러움','가루가 앉은 듯 포근한 표면','안개처럼 퍼지는 낮은 대비의 빛','둥글고 편안한 형태의 흐름'),
         acrylic:visualStyle('아크릴화','선명한 색과 단단한 질감이 특징인 스타일입니다.',['선명한 색','단단한 면','활기'],['#1f5060','#cf4b3d','#e6a432','#f4e6c8'],'brush','빠르고 선명한 붓질과 불투명한 색면','또렷한 색층과 탄력 있는 붓결','명확한 하이라이트와 색 대비','큰 형태가 분명한 역동적 구도'),
         gouache:visualStyle('구아슈','불투명하고 차분한 색면 표현이 매력적인 화풍입니다.',['불투명','차분함','색면'],['#3f6470','#b36a5e','#d3ad67','#eee3cd'],'graphic','벨벳처럼 무광인 색면과 또렷한 겹침','차분하고 불투명한 종이 위 색','부드럽지만 형태가 선명한 빛','동화책처럼 정돈된 화면'),

@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>씬 팔레트 — 이야기의 미술감독</title>
-  <meta name="description" content="좋아하는 이야기를 그림 스타일, 음악 프롬프트와 20장 스토리보드로 완성하는 초보 크리에이터용 미술감독 도구">
+  <meta name="description" content="좋아하는 이야기를 그림 스타일, 음악 프롬프트와 6~20장 맞춤 스토리보드로 완성하는 초보 크리에이터용 미술감독 도구">
   <meta name="theme-color" content="#83382f">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:site_name" content="씬 팔레트">
   <meta property="og:title" content="씬 팔레트 — 이야기를 하나의 작품으로">
-  <meta property="og:description" content="미술과 음악을 몰라도 괜찮아요. 좋아하는 이야기를 화풍, 음악 프롬프트와 20장 스토리보드로 설계해 보세요.">
+  <meta property="og:description" content="미술과 음악을 몰라도 괜찮아요. 좋아하는 이야기를 화풍, 음악 프롬프트와 6~20장 맞춤 스토리보드로 설계해 보세요.">
   <meta property="og:url" content="https://scene-palette.vercel.app/">
   <meta property="og:image" content="https://scene-palette.vercel.app/og.jpg">
   <meta property="og:image:secure_url" content="https://scene-palette.vercel.app/og.jpg">
@@ -20,7 +20,7 @@
   <meta property="og:image:alt" content="책 속에서 유화, 수채화, 고전 판화와 음악, 스토리보드가 펼쳐지는 씬 팔레트">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="씬 팔레트 — 이야기를 하나의 작품으로">
-  <meta name="twitter:description" content="좋아하는 이야기를 그림 스타일, 음악 프롬프트와 20장 스토리보드로 완성하세요.">
+  <meta name="twitter:description" content="좋아하는 이야기를 그림 스타일, 음악 프롬프트와 6~20장 맞춤 스토리보드로 완성하세요.">
   <meta name="twitter:image" content="https://scene-palette.vercel.app/og.jpg">
   <meta name="twitter:image:alt" content="씬 팔레트 오픈그래프 이미지">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238d3c32'/%3E%3Cpath d='M18 43V21h13c8 0 15 4 15 11s-7 11-15 11H18zm8-7h6c4 0 7-1 7-4s-3-4-7-4h-6v8z' fill='%23f7efe1'/%3E%3C/svg%3E">
@@ -188,6 +188,9 @@
       cursor:pointer;
     }
     .segment[aria-pressed="true"] { color:#fff; background:var(--ink); border-color:var(--ink); }
+    .scene-count-options { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; }
+    .story-structure-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+    .choice-help { margin:7px 0 0; color:var(--muted); font-size:.8rem; line-height:1.45; }
 
     .project-card { position:relative; z-index:1; }
     .project-card h2 { margin:0 0 8px; font-size:1.9rem; }
@@ -455,6 +458,7 @@
       .segmented,.service-select { grid-template-columns:1fr; }
       .story-entry { grid-template-columns:1fr; }
       .apply-story { width:100%; }
+      .scene-count-options { grid-template-columns:repeat(3,1fr); }
       .storyboard-apply-alert { align-items:stretch; flex-direction:column; }
       .storyboard-apply-alert button { width:100%; }
       .scene-strip { grid-template-columns:repeat(4,1fr); }
@@ -521,6 +525,19 @@
             <button class="segment" type="button" aria-pressed="false" data-duration="3분">3분</button>
           </div>
         </div>
+        <div class="field">
+          <span>스토리 구성</span>
+          <div class="story-structure-options" id="story-structure-options" aria-label="스토리 구성 선택">
+            <button class="segment" type="button" aria-pressed="true" data-structure="threeAct">서론 · 본론 · 결론</button>
+            <button class="segment" type="button" aria-pressed="false" data-structure="fourAct">기 · 승 · 전 · 결</button>
+          </div>
+          <p class="choice-help">선택한 구성에 맞춰 전체 이야기의 시작, 전개, 전환과 결말을 배치합니다.</p>
+        </div>
+        <div class="field">
+          <span>스토리보드 장면 수</span>
+          <div class="scene-count-options" id="scene-count-options" aria-label="스토리보드 장면 수 선택"></div>
+          <p class="choice-help">6장부터 20장까지 선택할 수 있으며 기본값은 10장입니다.</p>
+        </div>
       </div>
       <div class="brief-preview">
         <div class="project-card">
@@ -529,7 +546,8 @@
           <p id="project-summary">절제된 설렘과 우아함을 담은 회화적 뮤직비디오</p>
           <div class="project-facts">
             <div class="project-fact"><small>길이</small><strong id="summary-duration">2분 30초</strong></div>
-            <div class="project-fact"><small>장면 수</small><strong>20장</strong></div>
+            <div class="project-fact"><small>장면 수</small><strong id="summary-scene-count">10장</strong></div>
+            <div class="project-fact"><small>스토리 구성</small><strong id="summary-structure">서론 · 본론 · 결론</strong></div>
             <div class="project-fact"><small>그림</small><strong id="summary-style">아직 선택 전</strong></div>
             <div class="project-fact"><small>음악</small><strong id="summary-music">추천받기</strong></div>
           </div>
@@ -574,7 +592,7 @@
 
     <section class="step-section" aria-labelledby="bible-title">
       <div class="section-head">
-        <div><p class="section-label">비주얼 바이블</p><h2 id="bible-title">스무 장을 하나의 작품처럼</h2></div>
+        <div><p class="section-label">비주얼 바이블</p><h2 id="bible-title">선택한 장면을 하나의 작품처럼</h2></div>
         <p>고른 스타일을 색, 빛, 인물, 의상, 구도의 규칙으로 바꿔 모든 장면에 고정합니다.</p>
       </div>
       <div class="bible-layout surface">
@@ -625,12 +643,12 @@
 
     <section class="step-section" id="storyboard" aria-labelledby="storyboard-title">
       <div class="section-head">
-        <div><p class="section-label">4 · 20장 스토리보드</p><h2 id="storyboard-title">프로젝트(작품명)을 입력하세요</h2></div>
+        <div><p class="section-label" id="storyboard-section-label">4 · 10장 스토리보드</p><h2 id="storyboard-title">프로젝트(작품명)을 입력하세요</h2></div>
         <p>장면 번호를 누르면 이야기 역할, 시간, 화면 제작문을 확인할 수 있습니다.</p>
       </div>
       <div class="storyboard surface">
         <div class="storyboard-apply-alert" id="storyboard-apply-alert" role="status" hidden>
-          <div><strong id="storyboard-pending-title">입력한 작품명이 아직 적용되지 않았습니다.</strong><span>아래 20장은 현재 적용된 작품의 내용입니다.</span></div>
+          <div><strong id="storyboard-pending-title">입력한 작품명이 아직 적용되지 않았습니다.</strong><span id="storyboard-current-copy">아래 10장은 현재 적용된 작품의 내용입니다.</span></div>
           <button class="primary-action" type="button" id="apply-storyboard">여기서 전체 적용하기</button>
         </div>
         <div class="scene-strip" id="scene-strip" aria-label="장면 선택"></div>
@@ -643,7 +661,7 @@
 
     <section class="export-bar" aria-labelledby="export-title">
       <div><h2 id="export-title">첫 번째 작품 세계가 준비됐어요</h2><p>선택한 시각 규칙, 음악 방향, 스토리보드를 하나의 제작안으로 가져가세요.</p></div>
-      <div class="export-actions"><button class="secondary-action" type="button" id="copy-plan" style="color:#f7efe2;border-color:#756f66">기획안 복사</button><button class="primary-action" type="button" id="download-plan">제작안 내려받기</button><button class="primary-action pdf-action" type="button" id="download-pdf" aria-label="음악 프롬프트와 20개 이미지 프롬프트를 PDF로 다운로드">PDF 다운로드</button></div>
+      <div class="export-actions"><button class="secondary-action" type="button" id="copy-plan" style="color:#f7efe2;border-color:#756f66">기획안 복사</button><button class="primary-action" type="button" id="download-plan">제작안 내려받기</button><button class="primary-action pdf-action" type="button" id="download-pdf" aria-label="음악 프롬프트와 선택한 장면의 이미지 프롬프트를 PDF로 다운로드">PDF 다운로드</button></div>
     </section>
   </main>
 
@@ -653,7 +671,7 @@
     (function () {
       const FEATURED_STYLE_KEYS=['oil','watercolor','engraving'];
       const STYLE_KEYS=FEATURED_STYLE_KEYS.concat(['impressionism','postImpressionism','realism','surrealism','expressionism','romanticism','modernArt','contemporary','abstract','minimal','digital','japaneseAnime','pastel','acrylic','gouache','inkWash','oriental','sumukhColor','artNouveau','artDeco','vintageIllustration','fantasy','dreamscape','cinematic','photorealism','hyperrealism','painterly','textured']);
-      const defaultState={story:'',moods:['절제된 설렘','우아함'],duration:'2분 30초',style:'oil',sound:'restrained',service:'suno',scene:0};
+      const defaultState={story:'',moods:['절제된 설렘','우아함'],duration:'2분 30초',sceneCount:10,structure:'threeAct',style:'oil',sound:'restrained',service:'suno',scene:0};
       const state=Object.assign({},defaultState,{moods:defaultState.moods.slice()});
       try { localStorage.removeItem('scene-palette-state-v3'); } catch(error) {}
       function visualStyle(name,description,tags,palette,texture,watch,note,light,composition){return {name:name,description:description,tags:tags,palette:palette,texture:texture,watch:watch,note:note,light:light,composition:composition};}
@@ -842,13 +860,38 @@
           return [time,beat[1],beat[2].replace(/\{story\}/g,title),beat[3].replace(/\{story\}/g,title)];
         });
       }
-      function buildScenes(story){
+      function baseScenesForStory(story){
         const key=normalizeStory(story);
         if(key.includes('오만과편견')||key.includes('prideandprejudice')) return cloneScenes(prideScenes);
         if(key.includes('오디세이아')||key.includes('오디세우스')||key.includes('odyssey')||key.includes('odysseus')) return cloneScenes(odysseyScenes);
         if(key.includes('일리아스')||key.includes('일리야드')||key.includes('iliad')) return cloneScenes(iliadScenes);
         if(key.includes('신데렐라')||key.includes('cinderella')||key.includes('cendrillon')) return cloneScenes(cinderellaScenes);
         return buildGenericScenes(story);
+      }
+      function durationSeconds(){return {'2분':120,'2분 30초':150,'3분':180}[state.duration]||150;}
+      function clockLabel(totalSeconds){
+        const minutes=Math.floor(totalSeconds/60);
+        const seconds=totalSeconds%60;
+        return String(minutes).padStart(2,'0')+':'+String(seconds).padStart(2,'0');
+      }
+      function narrativePhase(index,count,structure){
+        const progress=(index+.5)/count;
+        if(structure==='fourAct') return progress<.25?'기':progress<.5?'승':progress<.75?'전':'결';
+        return progress<.25?'서론':progress<.75?'본론':'결론';
+      }
+      function structureLabel(structure){return structure==='fourAct'?'기 · 승 · 전 · 결':'서론 · 본론 · 결론';}
+      function buildScenes(story,count,structure){
+        const base=baseScenesForStory(story);
+        const target=Math.max(6,Math.min(20,Number(count)||10));
+        const total=durationSeconds();
+        return Array.from({length:target},function(_,index){
+          const sourceIndex=Math.round(index*(base.length-1)/(target-1));
+          const scene=base[sourceIndex].slice();
+          const start=Math.round(total*index/target);
+          const end=Math.round(total*(index+1)/target);
+          scene[0]=clockLabel(start)+'–'+clockLabel(end)+' · '+narrativePhase(index,target,structure);
+          return scene;
+        });
       }
       function storyContext(story){
         const key=normalizeStory(story);
@@ -858,7 +901,7 @@
         if(key.includes('신데렐라')||key.includes('cinderella')||key.includes('cendrillon')) return 'timeless 17th-to-18th-century European fairy-tale world, candlelit manor, enchanted garden and luminous palace';
         return 'world and period details appropriate to '+((story||'the selected story').trim()||'the selected story');
       }
-      let scenes=buildScenes(state.story);
+      let scenes=buildScenes(state.story,state.sceneCount,state.structure);
 
       function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(function(){toast.classList.remove('show');},1800);}
       function saveState(){
@@ -898,10 +941,29 @@
         }).join('');
         document.querySelectorAll('.style-card,.style-toggle').forEach(function(btn){btn.addEventListener('click',function(){selectStyle(btn.dataset.style);saveState();});});
       }
+      function renderSceneCountOptions(){
+        const container=document.getElementById('scene-count-options');
+        container.innerHTML=Array.from({length:15},function(_,index){
+          const count=index+6;
+          return '<button class="segment" type="button" aria-pressed="'+String(count===state.sceneCount)+'" data-scene-count="'+count+'">'+count+'장</button>';
+        }).join('');
+        container.querySelectorAll('button').forEach(function(btn){
+          btn.addEventListener('click',function(){
+            state.sceneCount=Number(btn.dataset.sceneCount);
+            container.querySelectorAll('button').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});
+            updateSummary();
+            refreshStoryboard(false);
+            updateStoryApplyState();
+            saveState();
+          });
+        });
+      }
       function syncControlsFromState(){
         document.getElementById('story-input').value='';
         document.querySelectorAll('#mood-chips .chip').forEach(function(el){el.setAttribute('aria-pressed',String(state.moods.includes(el.textContent)));});
         document.querySelectorAll('#duration-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.duration===state.duration));});
+        document.querySelectorAll('#story-structure-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.structure===state.structure));});
+        document.querySelectorAll('#scene-count-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(Number(el.dataset.sceneCount)===state.sceneCount));});
         document.querySelectorAll('.style-card,.style-toggle').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.style===state.style));});
         document.querySelectorAll('.sound-route').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.sound===state.sound));});
         document.querySelectorAll('#service-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.service===state.service));});
@@ -911,6 +973,8 @@
         document.getElementById('project-name').textContent=state.story||'프로젝트(작품명)을 입력하세요';
         document.getElementById('project-summary').textContent=(state.moods.join('과 ')||'선택한 분위기')+'을 담은 회화적 뮤직비디오';
         document.getElementById('summary-duration').textContent=state.duration;
+        document.getElementById('summary-scene-count').textContent=state.sceneCount+'장';
+        document.getElementById('summary-structure').textContent=structureLabel(state.structure);
         document.getElementById('summary-style').textContent=styleData[state.style].name;
       }
       function updateStoryRules(){
@@ -951,14 +1015,18 @@
         selectScene(state.scene);
       }
       function refreshStoryboard(resetScene){
-        scenes=buildScenes(state.story);
+        scenes=buildScenes(state.story,state.sceneCount,state.structure);
         if(resetScene!==false||!scenes[state.scene]) state.scene=0;
-        document.getElementById('storyboard-title').textContent=state.story?'《'+state.story.trim()+'》의 20장 스토리보드':'프로젝트(작품명)을 입력하세요';
+        document.getElementById('storyboard-section-label').textContent='4 · '+state.sceneCount+'장 스토리보드';
+        document.getElementById('storyboard-title').textContent=state.story?'《'+state.story.trim()+'》의 '+state.sceneCount+'장 스토리보드':'프로젝트(작품명)을 입력하세요';
+        document.getElementById('storyboard-current-copy').textContent='아래 '+state.sceneCount+'장은 현재 적용된 작품의 내용입니다.';
+        document.getElementById('download-pdf').setAttribute('aria-label','음악 프롬프트와 '+state.sceneCount+'개 이미지 프롬프트를 PDF로 다운로드');
         renderScenes();
       }
       function makeScenePrompt(scene){
         const style=styleData[state.style];
-        return scene[3]+', '+style.name+', '+style.note+', '+style.light+', '+storyContext(state.story)+', consistent recurring characters, cinematic composition, no anachronisms.';
+        const phase=scene[0].split(' · ')[1]||structureLabel(state.structure);
+        return scene[3]+', narrative phase: '+phase+', '+style.name+', '+style.note+', '+style.light+', '+storyContext(state.story)+', consistent recurring characters, cinematic composition, no anachronisms.';
       }
       function selectScene(index){
         if(!scenes[index]) index=0;
@@ -970,7 +1038,7 @@
         document.getElementById('scene-description').textContent=s[2];
         document.getElementById('scene-prompt').textContent=makeScenePrompt(s);
       }
-      function planObject(){return {project:state.story,duration:state.duration,moods:state.moods,storyWorld:storyProfile(state.story),visualStyle:styleData[state.style].name,visualBible:styleData[state.style],soundDirection:soundData[state.sound].name,musicService:state.service,musicPrompt:document.getElementById('music-prompt').textContent,storyboard:scenes.map(function(s,i){return {scene:i+1,time:s[0],title:s[1],description:s[2],prompt:makeScenePrompt(s)};})};}
+      function planObject(){return {project:state.story,duration:state.duration,sceneCount:state.sceneCount,storyStructure:structureLabel(state.structure),moods:state.moods,storyWorld:storyProfile(state.story),visualStyle:styleData[state.style].name,visualBible:styleData[state.style],soundDirection:soundData[state.sound].name,musicService:state.service,musicPrompt:document.getElementById('music-prompt').textContent,storyboard:scenes.map(function(s,i){return {scene:i+1,time:s[0],title:s[1],description:s[2],prompt:makeScenePrompt(s)};})};}
 
       function textBytes(value){return new TextEncoder().encode(value);}
       function concatBytes(parts){
@@ -1082,7 +1150,10 @@
         drawPdfHeader(context,'MUSIC PROMPT','《'+project+'》 음악 프롬프트',1,totalPages);
         context.fillStyle='#6f5f52';
         context.font='400 23px "Malgun Gothic",sans-serif';
-        context.fillText(plan.duration+' · '+plan.visualStyle+' · '+plan.soundDirection,82,305);
+        context.fillText(plan.duration+' · '+plan.sceneCount+'장 · '+plan.storyStructure,82,305);
+        context.fillStyle='#8a796b';
+        context.font='400 19px "Malgun Gothic",sans-serif';
+        context.fillText(plan.visualStyle+' · '+plan.soundDirection,82,340);
         context.fillStyle='#efe3d3';
         context.beginPath();context.roundRect(82,355,1076,1160,24);context.fill();
         context.fillStyle='#843d34';
@@ -1104,7 +1175,7 @@
         const page=createPdfCanvas();
         const context=page.context;
         const project=plan.project||'새로운 이야기';
-        drawPdfHeader(context,'IMAGE PROMPTS','《'+project+'》 20장 이미지 프롬프트',pageNumber,totalPages);
+        drawPdfHeader(context,'IMAGE PROMPTS','《'+project+'》 '+plan.sceneCount+'장 이미지 프롬프트',pageNumber,totalPages);
         pair.forEach(function(scene,index){
           const top=300+(index*690);
           context.fillStyle='#ffffff';
@@ -1134,7 +1205,7 @@
         const originalText=button.textContent;
         button.disabled=true;
         button.textContent='PDF 만드는 중…';
-        showToast('음악과 20개 프롬프트를 PDF로 만들고 있습니다.');
+        showToast('음악과 '+state.sceneCount+'개 프롬프트를 PDF로 만들고 있습니다.');
         try {
           if(document.fonts&&document.fonts.ready) await document.fonts.ready;
           await new Promise(function(resolve){requestAnimationFrame(resolve);});
@@ -1176,8 +1247,8 @@
         button.disabled=!title;
         help.classList.remove('pending','applied');
         if(!title){alert.hidden=true;help.textContent=state.story?'현재는 《'+state.story+'》 프로젝트입니다. 새 작품명을 입력하면 전체에 바꿀 수 있습니다.':'작품명을 입력한 뒤 전체 적용하기를 눌러주세요.';return;}
-        if(title===state.story){alert.hidden=true;help.textContent='《'+state.story+'》 작품을 20장 전체에 적용했습니다.';help.classList.add('applied');return;}
-        help.textContent='아직 적용 전입니다. 전체 적용하기를 누르면 20장 프롬프트가 모두 바뀝니다.';
+        if(title===state.story){alert.hidden=true;help.textContent='《'+state.story+'》 작품을 '+state.sceneCount+'장 전체에 적용했습니다.';help.classList.add('applied');return;}
+        help.textContent='아직 적용 전입니다. 전체 적용하기를 누르면 '+state.sceneCount+'장 프롬프트가 모두 바뀝니다.';
         help.classList.add('pending');
         alertTitle.textContent='입력한 《'+title+'》 작품이 아직 적용되지 않았습니다.';
         alert.hidden=false;
@@ -1196,7 +1267,7 @@
         refreshStoryboard();
         updateStoryApplyState();
         saveState();
-        if(settings.toast!==false) showToast('《'+title+'》 작품을 20장 전체에 적용했습니다.');
+        if(settings.toast!==false) showToast('《'+title+'》 작품을 '+state.sceneCount+'장 전체에 적용했습니다.');
         return true;
       }
 
@@ -1206,7 +1277,8 @@
       document.getElementById('apply-story').addEventListener('click',function(){applyStory();});
       document.getElementById('apply-storyboard').addEventListener('click',function(){applyStory();});
       document.querySelectorAll('#mood-chips .chip').forEach(function(btn){btn.addEventListener('click',function(){const on=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',String(on));state.moods=Array.from(document.querySelectorAll('#mood-chips .chip[aria-pressed="true"]')).map(function(el){return el.textContent;});updateSummary();saveState();});});
-      document.querySelectorAll('#duration-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.duration=btn.dataset.duration;document.querySelectorAll('#duration-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateSummary();updateMusic();saveState();});});
+      document.querySelectorAll('#duration-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.duration=btn.dataset.duration;document.querySelectorAll('#duration-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateSummary();updateMusic();refreshStoryboard(false);saveState();});});
+      document.querySelectorAll('#story-structure-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.structure=btn.dataset.structure;document.querySelectorAll('#story-structure-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateSummary();refreshStoryboard(false);saveState();});});
       document.getElementById('to-styles').addEventListener('click',function(){document.getElementById('styles').scrollIntoView({behavior:'smooth'});});
       document.querySelectorAll('.sound-route').forEach(function(btn){btn.addEventListener('click',function(){state.sound=btn.dataset.sound;document.querySelectorAll('.sound-route').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateMusic();saveState();});});
       document.querySelectorAll('#service-options .segment').forEach(function(btn){btn.addEventListener('click',function(){state.service=btn.dataset.service;document.querySelectorAll('#service-options .segment').forEach(function(el){el.setAttribute('aria-pressed',String(el===btn));});updateMusic();saveState();});});
@@ -1217,12 +1289,13 @@
 
       if(document.modelContext&&document.modelContext.registerTool){
         const controller=new AbortController();
-        Promise.resolve(document.modelContext.registerTool({name:'configure_project',title:'프로젝트 설정',description:'이야기 제목, 길이와 원하는 감정을 설정하고 보이는 프로젝트 요약, 음악 제작문과 20장 스토리보드를 전체 적용합니다.',inputSchema:{type:'object',properties:{story:{type:'string'},duration:{type:'string',enum:['2분','2분 30초','3분']},moods:{type:'array',items:{type:'string'},maxItems:5}},required:['story'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||typeof input.story!=='string'||!input.story.trim())throw new Error('이야기 제목이 필요합니다.');if(input.duration)state.duration=input.duration;if(Array.isArray(input.moods))state.moods=input.moods.slice(0,5);document.getElementById('story-input').value=input.story.trim();applyStory({toast:false});return {story:state.story,duration:state.duration,moods:state.moods,storyboardTitle:document.getElementById('storyboard-title').textContent,sceneCount:scenes.length};}},{signal:controller.signal})).catch(function(){});
+        Promise.resolve(document.modelContext.registerTool({name:'configure_project',title:'프로젝트 설정',description:'이야기 제목, 길이, 감정, 6~20장 장면 수와 이야기 구성을 설정하고 전체 스토리보드에 적용합니다.',inputSchema:{type:'object',properties:{story:{type:'string'},duration:{type:'string',enum:['2분','2분 30초','3분']},sceneCount:{type:'integer',minimum:6,maximum:20},structure:{type:'string',enum:['threeAct','fourAct']},moods:{type:'array',items:{type:'string'},maxItems:5}},required:['story'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||typeof input.story!=='string'||!input.story.trim())throw new Error('이야기 제목이 필요합니다.');if(input.duration)state.duration=input.duration;if(Number.isInteger(input.sceneCount)&&input.sceneCount>=6&&input.sceneCount<=20)state.sceneCount=input.sceneCount;if(['threeAct','fourAct'].includes(input.structure))state.structure=input.structure;if(Array.isArray(input.moods))state.moods=input.moods.slice(0,5);document.getElementById('story-input').value=input.story.trim();renderSceneCountOptions();syncControlsFromState();document.getElementById('story-input').value=input.story.trim();applyStory({toast:false});return {story:state.story,duration:state.duration,moods:state.moods,structure:structureLabel(state.structure),sceneCount:scenes.length,storyboardTitle:document.getElementById('storyboard-title').textContent};}},{signal:controller.signal})).catch(function(){});
         Promise.resolve(document.modelContext.registerTool({name:'select_visual_style',title:'그림 스타일 선택',description:'프로젝트의 그림 스타일을 선택하고 비주얼 바이블을 갱신합니다.',inputSchema:{type:'object',properties:{style:{type:'string',enum:STYLE_KEYS.slice()}},required:['style'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||!styleData[input.style])throw new Error('지원하지 않는 스타일입니다.');selectStyle(input.style);saveState();return {style:input.style,name:styleData[input.style].name};}},{signal:controller.signal})).catch(function(){});
         Promise.resolve(document.modelContext.registerTool({name:'select_music_output',title:'음악 출력 선택',description:'음악 방향과 제작 도구를 선택해 보이는 제작문을 갱신합니다.',inputSchema:{type:'object',properties:{direction:{type:'string',enum:['restrained','playful','crescendo']},service:{type:'string',enum:['suno','flow','both']}},required:['direction','service'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:function(input){if(!input||!soundData[input.direction]||!['suno','flow','both'].includes(input.service))throw new Error('지원하지 않는 음악 설정입니다.');state.sound=input.direction;state.service=input.service;updateMusic();saveState();return {direction:soundData[state.sound].name,service:state.service};}},{signal:controller.signal})).catch(function(){});
         Promise.resolve(document.modelContext.registerTool({name:'read_project_plan',title:'제작안 읽기',description:'현재 선택된 시각 스타일, 음악 방향과 스토리보드를 읽습니다.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute:function(){return planObject();}},{signal:controller.signal})).catch(function(){});
       }
 
+      renderSceneCountOptions();
       syncControlsFromState();
       renderStyleCards();
       updateSummary();
